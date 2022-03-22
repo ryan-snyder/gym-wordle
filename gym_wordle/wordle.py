@@ -14,8 +14,8 @@ class Wordle:
                     self.w_hash_table[l] = {'count':1, 'pos':[x]}
         self.rows = rows
         self.letters = letters
-        self.board = [[' ' for _ in range(letters)] for _ in range(rows)]
-        self.colours = [[' ' for _ in range(letters)] for _ in range(rows)]
+        self.board = [['' for _ in range(letters)] for _ in range(rows)]
+        self.colours = [['B' for _ in range(letters)] for _ in range(rows)]
         self.alph = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
 
     def is_end(self):
