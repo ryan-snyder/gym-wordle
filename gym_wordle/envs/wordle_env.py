@@ -29,7 +29,7 @@ class WordleEnv(gym.Env):
         #modified to work with gym/baselines
         #same thing basically, only 0-26 is '' to z and 27-29 is B, Y, G
         # first 6 rows are guesses and last 6 rows are colors
-        self.observation_space = spaces.Box(low=0, high=29, shape=(5,12))
+        self.observation_space = spaces.Box(low=0, high=29, shape=(5,12), dtype='int32')
         self.current_episode = -1
         self.episode_memory: List[Any] = []
 
