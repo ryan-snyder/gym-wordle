@@ -3,15 +3,24 @@ from gym import error, spaces, utils
 from gym.utils import seeding
 import pandas as pd
 from gym_wordle.wordle import Wordle
+import pygame
 import numpy as np
 import os
 
 class WordleEnv(gym.Env):
     metadata = {'render.modes': ['human']}
+    SCREEN_DIM = 500
+    GREEN = "#6aaa64"
+    YELLOW = "#c9b458"
+    GREY = "#787c7e"
+    OUTLINE = "#d3d6da"
+    FILLED_OUTLINE = "#878a8c"
 
     def __init__(self):
         current_dir = os.path.dirname(os.path.realpath(__file__))
         self.answers = pd.read_csv('{}/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words'])
+        self.screen = None
+        self.isopen = False
         self.GUESSES = 6
         self.LETTERS = 5
         self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
@@ -49,10 +58,26 @@ class WordleEnv(gym.Env):
         return self._get_observation()
 
     def render(self, mode='human'):
-        return None
+        if self.screen is None:
+            pygame.init()
+            pygame.display.init()
+            self.screen = pygame.display.set_mode((self.SCREEN_DIM, self.SCREEN_DIM))
+        font = pygame.font.Font('freesansbold.ttf', 30)
+        for col in range(0, 5):
+            for row in range(0, 6):
+                pygame.draw.rect(self.screen, self.OUTLINE, [col * 100 + 12, row * 100 + 12, 75, 75], 3, 5)
+                color = self.GREEN if self.WORDLE.colours[row][col] == 'G' else self.YELLOW if self.WORDLE.colours[row][col] == 'Y' else self.GREY
+                piece_text = huge_font.render(self.WORDLE.board[row][col], True, color)
+                screen.blit(piece_text, (col * 100 + 30, row * 100 + 25))
+        #pygame.draw.rect(screen, self.GREEN, [5, turn * 100 + 5, WIDTH - 10, 90], 3, 5)
+        if mode == "human":
+            pygame.event.pump()
+            pygame.display.flip()
     def close(self):
-        # TODO
-        ...
+        if self.screen is not None:
+            pygame.display.quit()
+            pygame.quit()
+            self.isopen = False
 
     def _take_action(self, action):
         # turn action into guess
