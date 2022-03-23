@@ -68,7 +68,7 @@ class WordleEnv(gym.Env):
             for row in range(0, 6):
                 pygame.draw.rect(self.screen, self.OUTLINE, [col * 100 + 12, row * 100 + 12, 75, 75], 3, 5)
                 color = self.GREEN if self.WORDLE.colours[row][col] == 'G' else self.YELLOW if self.WORDLE.colours[row][col] == 'Y' else self.GREY
-                piece_text = huge_font.render(self.WORDLE.board[row][col], True, color)
+                piece_text = font.render(self.WORDLE.board[row][col], True, color)
                 screen.blit(piece_text, (col * 100 + 30, row * 100 + 25))
         #pygame.draw.rect(screen, self.GREEN, [5, turn * 100 + 5, WIDTH - 10, 90], 3, 5)
         if mode == "human":
