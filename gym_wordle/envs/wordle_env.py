@@ -11,7 +11,6 @@ class WordleEnv(gym.Env):
 
     def __init__(self):
         current_dir = os.path.dirname(os.path.realpath(__file__))
-        print(current_dir, flush=True)
         self.answers = pd.read_csv('{}/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words'])
         self.GUESSES = 6
         self.LETTERS = 5
@@ -22,7 +21,6 @@ class WordleEnv(gym.Env):
         self.is_game_over = False
 
         file_names = ['{}/wordle-allowed-guesses.txt'.format(current_dir), '{}/wordle-answers-alphabetical.txt'.format(current_dir)]
-        print(file_names)
         self.word_bank = pd.concat((pd.read_csv(f, header=None, names=['words']) for f in file_names), ignore_index=True).sort_values('words')['words'].tolist()
         # our action space is the total amount of possible words to guess
         self.action_space = spaces.Discrete(12972)
@@ -47,7 +45,6 @@ class WordleEnv(gym.Env):
         self.episode_memory.append([])
         self.is_game_over = False
         self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
-        print('Current word is ', self.WORD)
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
         return self._get_observation()
 
@@ -68,7 +65,7 @@ class WordleEnv(gym.Env):
     def _get_reward(self):
         result, tries = self.WORDLE.game_result()
         reward = 0
-        reward += 6 - tries if tries <=6 else 0
+        reward += 30 - (tries*5) if tries <=6 else 0
         for c in self.WORDLE.colours[self.WORDLE.g_count-1]:
             if c == self.colors[2]:
                 reward += 3
@@ -80,7 +77,6 @@ class WordleEnv(gym.Env):
         board = np.array(self.WORDLE.board) #2d array of 5x6
         colors = np.array(self.WORDLE.colours) #2d array of 5x6
         results = np.vstack((board, colors)) #stacks boards and colors by rows resulting in a 2d array of 5x12
-        print(results)
         convertletterstonum = lambda letter: [self.alpha.index(l) + 1 if l in self.alpha else 0 for l in letter]
         convertcolortonum = lambda color: [self.colors.index(c)+27 for c in color]
         guesses = [convertletterstonum(l) if i <=5 else convertcolortonum(l) for i, l in enumerate(results)]
