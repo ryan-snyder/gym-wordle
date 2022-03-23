@@ -26,10 +26,10 @@ class WordleEnv(gym.Env):
         # our action space is the total amount of possible words to guess
         self.action_space = spaces.Discrete(12972)
         #our observation space is the current wordle board in form of (letter, color) with 5x6 (5 letters, 6 guesses)
-        # I think a better space would be
-        self.observation_space = spaces.Dict({'guesses': spaces.Box(0,26, (5,6)), 'colors': spaces.Box(0,2, (5,6))})
-        # so guesses is a box of shape 5,6 (5 letters, 6 guesses) from 0-25 (or a-z), and colors is the same, only from
-        # 0-2 (or black, yellow, green)
+        #modified to work with gym/baselines
+        #same thing basically, only 0-26 is '' to z and 27-29 is B, Y, G
+        # first 6 rows are guesses and last 6 rows are colors
+        self.observation_space = spaces.Box(low=0, high=29, shape=(5,12))
         self.current_episode = -1
         self.episode_memory: List[Any] = []
 
@@ -83,6 +83,6 @@ class WordleEnv(gym.Env):
         print(results)
         convertlettertonum = lambda l: self.alpha.index(l) + 1 if l in self.alpha else 0
         guesses = [ [convertlettertonum(l) for l in r] for r in board]
-        convertcolortonum = lambda color: [self.colors.index(c) for c in color]
+        convertcolortonum = lambda color: [self.colors.index(c)+27 for c in color]
         colors = [convertcolortonum(r) for r in results]
-        return {'guesses': guesses, 'colors': colors}
+        return guesses.extend(colors)
