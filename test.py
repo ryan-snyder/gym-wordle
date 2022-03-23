@@ -1,4 +1,6 @@
 import gym
+import os
+os.environ['SDL_VIDEODRIVER']='dummy'
 
 import gym_wordle
 

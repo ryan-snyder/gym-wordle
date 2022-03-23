@@ -55,6 +55,7 @@ class WordleEnv(gym.Env):
         self.is_game_over = False
         self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
+        print(self.WORDLE.word)
         self.close()
         return self._get_observation()
 
@@ -73,7 +74,7 @@ class WordleEnv(gym.Env):
         #pygame.draw.rect(screen, self.GREEN, [5, turn * 100 + 5, WIDTH - 10, 90], 3, 5)
         if mode == "human":
             pygame.event.pump()
-            pygame.display.flip()
+            pygame.display.flip()             
     def close(self):
         if self.screen is not None:
             pygame.display.quit()
@@ -84,7 +85,7 @@ class WordleEnv(gym.Env):
         # turn action into guess
         guess = self.word_bank[action]
         self.episode_memory[self.current_episode].append(guess)
-
+        print(guess)
         self.WORDLE.update_board(guess)
         self.is_game_over = self.WORDLE.word == guess or self.WORDLE.g_count == self.GUESSES
 
