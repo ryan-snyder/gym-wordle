@@ -49,13 +49,14 @@ class WordleEnv(gym.Env):
         observation = self._get_observation()
         return observation, reward, self.is_game_over, {}
 
-    def reset(self):
+    def reset(self, logging=False):
         self.current_episode = -1
         self.episode_memory.append([])
         self.is_game_over = False
         self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
-        print(self.WORDLE.word)
+        if logging:
+            print(self.WORDLE.word)
         self.close()
         return self._get_observation()
 
