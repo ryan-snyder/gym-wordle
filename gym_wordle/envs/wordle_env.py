@@ -11,7 +11,7 @@ class WordleEnv(gym.Env):
     def __init__(self):
         current_dir = os.path.dirname(os.path.realpath(__file__))
         print(current_dir, flush=True)
-        self.answers = pd.read_csv('{}/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words'])
+        self.answers = pd.read_csv('gym_wordle/envs/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words'])
         self.GUESSES = 6
         self.LETTERS = 5
         self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
@@ -21,6 +21,7 @@ class WordleEnv(gym.Env):
         self.is_game_over = False
 
         file_names = ['{}/wordle-allowed-guesses.txt'.format(current_dir), '{}/wordle-answers-alphabetical.txt'.format(current_dir)]
+        print(file_names)
         self.word_bank = pd.concat((pd.read_csv(f, header=None, names=['words']) for f in file_names), ignore_index=True).sort_values('words')['words'].tolist()
         # our action space is the total amount of possible words to guess
         self.action_space = spaces.Discrete(12972)
