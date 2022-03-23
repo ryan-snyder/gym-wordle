@@ -3,6 +3,7 @@ from gym import error, spaces, utils
 from gym.utils import seeding
 import pandas as pd
 from gym_wordle.wordle import Wordle
+import numpy as np
 import os
 
 class WordleEnv(gym.Env):
@@ -42,7 +43,6 @@ class WordleEnv(gym.Env):
         return observation, reward, self.is_game_over, {}
 
     def reset(self):
-        # TODO
         self.current_episode = -1
         self.episode_memory.append([])
         self.is_game_over = False
@@ -77,12 +77,11 @@ class WordleEnv(gym.Env):
         return reward
 
     def _get_observation(self):
-        board = self.WORDLE.board
-        results = self.WORDLE.colours
-        print(board)
+        board = np.array(self.WORDLE.board) #2d array of 5x6
+        colors = np.array(self.WORDLE.colours) #2d array of 5x6
+        results = np.vstack((board, colors)) #stacks boards and colors by rows resulting in a 2d array of 5x12
         print(results)
-        convertlettertonum = lambda l: self.alpha.index(l) + 1 if l in self.alpha else 0
-        guesses = [ [convertlettertonum(l) for l in r] for r in board]
+        convertletterstonum = lambda letter: [self.alpha.index(l) + 1 if l in self.alpha else 0 for l in letter]
         convertcolortonum = lambda color: [self.colors.index(c)+27 for c in color]
-        colors = [convertcolortonum(r) for r in results]
-        return guesses.extend(colors)
+        guesses = [convertletterstonum(l) if i <=5 else convertcolortonum(l) for i, l in enumerate(results)]
+        return guesses
