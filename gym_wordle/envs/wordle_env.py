@@ -55,6 +55,7 @@ class WordleEnv(gym.Env):
         self.is_game_over = False
         self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
+        self.close()
         return self._get_observation()
 
     def render(self, mode='human'):
