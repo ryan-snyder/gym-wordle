@@ -10,7 +10,7 @@ class WordleEnv(gym.Env):
 
     def __init__(self):
         current_dir = os.path.dirname(os.path.realpath(__file__))
-        print(current_dir)
+        print(current_dir, flush=True)
         self.answers = pd.read_csv('{}/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words'])
         self.GUESSES = 6
         self.LETTERS = 5
