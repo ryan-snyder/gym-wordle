@@ -5,12 +5,12 @@ import pandas as pd
 from gym_wordle.wordle import Wordle
 import os
 
-current_dir = os.path.dirname(os.path.realpath(__file__))
-
 class WordleEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
+        current_dir = os.path.dirname(os.path.realpath(__file__))
+        print(current_dir)
         self.answers = pd.read_csv('{}/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words'])
         self.GUESSES = 6
         self.LETTERS = 5
