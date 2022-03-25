@@ -121,4 +121,4 @@ class WordleEnv(gym.Env):
         convertletterstonum = lambda letter: [self.alpha.index(l) + 1 if l in self.alpha else 0 for l in letter]
         convertcolortonum = lambda color: [self.colors.index(c)+27 for c in color]
         guesses = [convertletterstonum(l) if i <=5 else convertcolortonum(l) for i, l in enumerate(results)]
-        return guesses
+        return np.array(guesses)
