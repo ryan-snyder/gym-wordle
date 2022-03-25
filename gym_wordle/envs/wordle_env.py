@@ -96,11 +96,22 @@ class WordleEnv(gym.Env):
         result, tries = self.WORDLE.game_result()
         reward = 0
         reward += 30 - (tries*5) if tries <=6 else 0
+        #heavily penealize guessing the same word multiple times
+        #If a word isn't the right guess, we shouldn't guess it again
         for c in self.WORDLE.colours[self.WORDLE.g_count-1]:
             if c == self.colors[2]:
                 reward += 3
             elif c == self.colors[1]:
                 reward += 1
+        #check guesses up to and including our current guess
+        guessed_words = []
+        for g in range(self.WORDLE.g_count):
+            word = self.WORDLE.board[g]
+            current = ''.join(word)
+            if current not in guessed_words:
+                guessed_words.append(current)
+            else:
+                return 0
         return reward
 
     def _get_observation(self):
