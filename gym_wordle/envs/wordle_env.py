@@ -16,8 +16,9 @@ class WordleEnv(gym.Env):
     OUTLINE = "#d3d6da"
     FILLED_OUTLINE = "#878a8c"
 
-    def __init__(self):
+    def __init__(self, logging=False):
         current_dir = os.path.dirname(os.path.realpath(__file__))
+        self.logging = logging
         self.answers = pd.read_csv('{}/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words'])
         self.screen = None
         self.isopen = False
@@ -49,13 +50,13 @@ class WordleEnv(gym.Env):
         observation = self._get_observation()
         return observation, reward, self.is_game_over, {}
 
-    def reset(self, logging=False):
+    def reset(self):
         self.current_episode = -1
         self.episode_memory.append([])
         self.is_game_over = False
         self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
-        if logging:
+        if self.logging:
             print(self.WORDLE.word)
         self.close()
         return self._get_observation()
@@ -86,7 +87,8 @@ class WordleEnv(gym.Env):
         # turn action into guess
         guess = self.word_bank[action]
         self.episode_memory[self.current_episode].append(guess)
-        print(guess)
+        if self.logging:
+            print(guess)
         self.WORDLE.update_board(guess)
         self.is_game_over = self.WORDLE.word == guess or self.WORDLE.g_count == self.GUESSES
 
