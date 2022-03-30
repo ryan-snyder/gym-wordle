@@ -5,7 +5,7 @@ with open('README.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
 
 setup(name='alt_gym_wordle',
-    version=app.__version__,
+    version='0.1.8,
     author='Ryan Snyder',
     description='OpenAI gym environment for training agents on Wordle',
     long_description=long_description,
