@@ -23,18 +23,21 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: '3.x'
-    - name: Install dependencies and change dir
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install build
-        cd gym_wordle
-        ls
-    - name: Automated Version Bump - Python
-      uses: digza/automatic-python-version@0.0.13
-      with:
-        skip-tag: true
-    - name: Change dir
-      run: cd ..
+    - name: Autobump version
+      run: |
+          # from refs/tags/v1.2.3 get 1.2.3
+          VERSION=$(echo $GITHUB_REF | sed 's#.*/v##')
+          PLACEHOLDER='__version__ = "develop"'
+          VERSION_FILE='gym_wordle/__init__.py'
+          # ensure the placeholder is there. If grep doesn't find the placeholder
+          # it exits with exit code 1 and github actions aborts the build. 
+          grep "$PLACEHOLDER" "$VERSION_FILE"
+          sed -i "s/$PLACEHOLDER/__version__ = \"${VERSION}\"/g" "$VERSION_FILE"
+      shell: bash
     - name: Build package
       run: python -m build
     - name: Publish package
