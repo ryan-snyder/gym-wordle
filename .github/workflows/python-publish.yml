@@ -30,6 +30,7 @@ jobs:
     - name: Automated Version Bump - Python
       uses: digza/automatic-python-version@0.0.13
       with:
+        PACKAGEJSON_DIR: gym_wordle
         skip-tag: true
     - name: Build package
       run: python -m build
