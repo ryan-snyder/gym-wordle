@@ -17,7 +17,7 @@ setup(name='alt_gym_wordle',
         ]
     ),
     package_data={
-        'gym_wordle': ['*.txt']
+        'gym_wordle': ['envs/*.txt']
     },
     install_requires=['gym', 'pandas', 'pygame']  # And any other dependencies foo needs
 )
