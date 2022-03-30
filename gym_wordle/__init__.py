@@ -1,6 +1,6 @@
 from gym.envs.registration import register
 
-__version__ = 'develop'
+__version__ = '0.1.7'
 register(
     id='Wordle-v0',
     entry_point='gym_wordle.envs:WordleEnv',
