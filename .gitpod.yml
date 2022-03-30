@@ -1,5 +1,5 @@
 tasks:
   - init: |
-      echo 'TODO: build project'
+      pip install -e .
     command: |
-      echo 'TODO: start app'
+      python test.py
