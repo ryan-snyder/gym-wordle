@@ -117,6 +117,9 @@ class WordleEnv(gym.Env):
             elif c == self.colors[1]:
                 rewards[i] = 1
         #check guesses up to and including our current guess
+        if self.logging:
+            print(self.WORD)
+            print(rewards)
         reward = np.mean(rewards)
         for g in range(self.WORDLE.g_count):
             word = self.WORDLE.board[g]
