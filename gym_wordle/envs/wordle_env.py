@@ -104,19 +104,20 @@ class WordleEnv(gym.Env):
 
     def _get_reward(self):
         result, tries = self.WORDLE.game_result()
-        reward = 0
+        rewards = np.zeros(5)
         #heavily penealize guessing the same word multiple times
         #If a word isn't the right guess, we shouldn't guess it again
         #could do the same thing for letters, as if a letter is blank(grey)
         # then the only reason to use a word with a letter in it
         # is to check other letter posistions
         #so it shouldn't be a heavy penalty but it should be a penalty
-        for c in self.WORDLE.colours[self.WORDLE.g_count-1]:
+        for c,i in enumerate(self.WORDLE.colours[self.WORDLE.g_count-1]):
             if c == self.colors[2]:
-                reward += 2
+                rewards[i] = 2
             elif c == self.colors[1]:
-                reward += 1
+                rewards[i] = 1
         #check guesses up to and including our current guess
+        reward = np.mean(rewards)
         for g in range(self.WORDLE.g_count):
             word = self.WORDLE.board[g]
             current = ''.join(word)
@@ -124,8 +125,8 @@ class WordleEnv(gym.Env):
                 return 0
             for l in word: 
                 if l in self.blank_letters:
-                    reward -= 0.5
-        return reward/5
+                    reward -= 0.3
+        return reward
 
     def _get_observation(self):
         board = np.array(self.WORDLE.board) #2d array of 5x6
