@@ -111,7 +111,7 @@ class WordleEnv(gym.Env):
         # then the only reason to use a word with a letter in it
         # is to check other letter posistions
         #so it shouldn't be a heavy penalty but it should be a penalty
-        for c,i in enumerate(self.WORDLE.colours[self.WORDLE.g_count-1]):
+        for i,c in enumerate(self.WORDLE.colours[self.WORDLE.g_count-1]):
             if c == self.colors[2]:
                 rewards[i] = 2
             elif c == self.colors[1]:
