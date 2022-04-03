@@ -6,7 +6,7 @@ from gym_wordle.wordle import Wordle
 import pygame
 import numpy as np
 import os
-# bump
+
 class WordleEnv(gym.Env):
     metadata = {'render.modes': ['human']}
     SCREEN_DIM = 500
