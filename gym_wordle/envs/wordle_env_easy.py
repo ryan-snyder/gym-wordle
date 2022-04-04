@@ -53,6 +53,7 @@ class WordleEnvEasy(gym.Env):
     def step(self, action):
         if self.is_game_over:
             return RuntimeError('Episode is already done')
+        self.word_score()
         self._take_action(action)
         reward = self._get_reward()
         self.rewards.append(reward)
@@ -155,7 +156,7 @@ class WordleEnvEasy(gym.Env):
         for i, s in enumerate(self.prediction):
             if s != '':
                 self.w_bank = self.w_bank.loc[self.w_bank['words'].str[i]==s.lower()]
-        self.w_bank.loc[:, ('w-score')] = [0] * len(self.w_bank)
+        self.w_bank.loc[:, ('w-score')] = 0
         if len(self.w_bank) > 5:
             self.calc_letter_probs() #Recalculate letter position probability
         for x in range(self.WORDLE.letters):
@@ -165,8 +166,9 @@ class WordleEnvEasy(gym.Env):
         if True not in [True for s in self.prediction if s in self.vowels]:
             self.w_bank.loc[:, ('w-score')] += self.w_bank.loc[:, ('v-count')] / self.WORDLE.letters
     def _get_reward(self):
-        self.word_score()
-        new_reward = np.nan_to_num(self.w_bank.at[self.word_bank.at[self.current_guess, 'words'], 'w-score']) if self.word_bank.at[self.current_guess, 'words'] in self.w_bank.values else 0
+        if self.WORDLE.g_count > 1:
+            self.word_score()
+        new_reward = np.nan_to_num(self.w_bank.loc[self.current_guess, 'w-score']) if self.word_bank['words'].to_list()[self.current_guess] in self.w_bank.values else 0
         result, tries = self.WORDLE.game_result()
         rewards = np.zeros(5)
         #heavily penealize guessing the same word multiple times
