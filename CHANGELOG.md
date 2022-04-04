@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.3 (2022-04-04)
+### Fix
+* Adjusting reward scale ([`21a1ddb`](https://github.com/ryan-snyder/gym-wordle/commit/21a1ddb0979e1453dd7bfdc96bd41fe51f2d9403))
+
 ## v0.3.2 (2022-04-04)
 ### Fix
 * Adjusting scoring algorithm ([`6d4aecd`](https://github.com/ryan-snyder/gym-wordle/commit/6d4aecdbec275de1526ba2eaf0bcea3ec13e7ebb))
