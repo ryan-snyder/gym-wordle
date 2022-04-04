@@ -15,14 +15,12 @@ jobs:
         with:
           ref: ${{ github.head_ref }}   # checkout the correct branch name
           fetch-depth: 0                # fetch the whole repo history
-      - name: tag-version
-          # You may pin to the exact commit or the version.
-          # uses: juliansangillo/tag-version@0ca10cb901a4e3273715c4443e5dec5ad8f40328
-        uses: juliansangillo/tag-version@v1.5
+      - name: Semantic Releaser
+        # You may pin to the exact commit or the version.
+        # uses: brpaz/action-semantic-release@978dcc77b36b45f08f55e8deaee1666585bba193
+        uses: brpaz/action-semantic-release@v1
         with:
-            # The branch to use for stable releases in production. Default is master
-          production-branch: main
-            # The branch to use for dev deployments. Default is develop
-          dev-branch: dev
+          # The branch to release from
+          branch: main
 
 
