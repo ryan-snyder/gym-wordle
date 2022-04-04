@@ -4,7 +4,7 @@ os.environ['SDL_VIDEODRIVER']='dummy'
 
 import gym_wordle
 
-env = gym.make('Wordle-v0', logging=True)
+env = gym.make('WordleEasy-v0', logging=True)
 env.reset()
 print('Playing one game of wordle, with random action')
 for _ in range(6):

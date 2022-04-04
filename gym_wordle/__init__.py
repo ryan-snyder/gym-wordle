@@ -5,3 +5,7 @@ register(
     id='Wordle-v0',
     entry_point='gym_wordle.envs:WordleEnv',
 )
+register(
+    id='WordleEasy-v0',
+    entry_point='gym_wordle.envs:WordleEnvEasy'
+)
