@@ -31,6 +31,7 @@ class WordleEnvEasy(gym.Env):
         self.is_game_over = False
         self.guessed_words = []
         self.blank_letters = []
+        self.rewards = []
 
         file_names = ['{}/wordle-answers-alphabetical.txt'.format(current_dir)]
         self.word_bank = pd.concat((pd.read_csv(f, header=None, names=['words']) for f in file_names), ignore_index=True).sort_values('words')['words'].tolist()
@@ -52,6 +53,7 @@ class WordleEnvEasy(gym.Env):
             return RuntimeError('Episode is already done')
         self._take_action(action)
         reward = self._get_reward()
+        self.rewards.append(reward)
         observation = self._get_observation()
         return observation, reward, self.is_game_over, {}
 
@@ -63,6 +65,7 @@ class WordleEnvEasy(gym.Env):
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
         self.guessed_words = []
         self.blank_letters = []
+        self.rewars = []
         if self.logging:
             print(self.WORDLE.word)
         self.close()
@@ -128,7 +131,12 @@ class WordleEnvEasy(gym.Env):
                 return 0
             for l in word: 
                 if l in self.blank_letters:
-                    reward -= 0.3
+                    reward -= 0.5
+        
+        if len(self.rewards) > 1:
+            previous_reward =self.rewards[-1]
+            if previous_reward > reward:
+                reward = reward / 2
         return reward
 
     def _get_observation(self):
@@ -139,7 +147,4 @@ class WordleEnvEasy(gym.Env):
         convertcolortonum = lambda color: [self.colors.index(c)+27 for c in color]
         guesses = np.array([convertletterstonum(l) if i <=5 else convertcolortonum(l) for i, l in enumerate(results)])
         guesses3d = np.expand_dims(guesses, axis=0)
-        if self.logging:
-            print(np.shape(guesses))
-            print(np.shape(guesses3d))
         return guesses3d
