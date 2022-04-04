@@ -35,8 +35,9 @@ class WordleEnvEasy(gym.Env):
         self.vowels = ['A','E','I','O','U','Y']
         file_names = ['{}/wordle-answers-alphabetical.txt'.format(current_dir)]
         self.word_bank = pd.concat((pd.read_csv(f, header=None, names=['words']) for f in file_names), ignore_index=True).sort_values('words')
-        self.word_bank['v-count'] = self.word_bank.apply(lambda x: ''.join(set(x))).str.count('|'.join(self.vowels)) #Count amount of vowels in words
+        self.word_bank['v-count'] = self.word_bank['words'].str.lower().str.count(r'[aeiou]') #Count amount of vowels in words
         # our action space is the total amount of possible words to guess
+        self.w_bank = self.word_bank
         self.action_space = spaces.Discrete(2315)
         #our observation space is the current wordle board in form of (letter, color) with 5x6 (5 letters, 6 guesses)
         #modified to work with gym/baselines
@@ -68,7 +69,8 @@ class WordleEnvEasy(gym.Env):
         self.blank_letters = []
         self.rewards = []
         self.g_letters = []
-        self.y_letters = []
+        self.y_letters = {}
+        self.w_bank = self.word_bank
         if self.logging:
             print(self.WORDLE.word)
         self.close()
@@ -110,8 +112,8 @@ class WordleEnvEasy(gym.Env):
         self.is_game_over = self.WORDLE.word == guess or self.WORDLE.g_count == self.GUESSES
     def calc_letter_probs(self):
         for x in range(self.WORDLE.letters):
-            counts = self.word_bank['words'].str[x].value_counts(normalize=True).to_dict()
-            self.word_bank[f'p-{x}'] = self.word_bank['words'].str[x].map(counts)
+            counts = self.w_bank.loc[:, ('words')].str[x].value_counts(normalize=True).to_dict()
+            self.w_bank.loc[:, (f'p-{x}')] = self.w_bank.loc[:, ('words')].str[x].map(counts)
     def parse_board(self):
         self.g_letters = []
         self.y_letters = {}
@@ -137,18 +139,35 @@ class WordleEnvEasy(gym.Env):
                         self.g_letters.append(letter)
             self.g_letters = [l for l in self.g_letters if l not in self.y_letters and l not in self.prediction]
     def word_score(self):
+        self.calc_letter_probs()
         self.prediction = ['' for _ in range(self.WORDLE.letters)]
         self.parse_board()
-        self.word_bank['w-score'] = [0] * len(self.word_bank)
-        self.calc_letter_probs() #Recalculate letter position probability
+        if len(self.g_letters) > 0:
+            print(self.w_bank)
+            self.w_bank = self.w_bank.loc[~self.w_bank['words'].str.contains('|'.join(self.g_letters).lower())]
+            self.g_letters = []
+        if len(self.y_letters) > 0:
+            y_str = '^' + ''.join(fr'(?=.*{l})' for l in self.y_letters)
+            self.w_bank = self.w_bank.loc[self.w_bank['words'].str.contains(y_str.lower())]
+            for s, p in self.y_letters.items():
+                for i in p:
+                    self.w_bank = self.w_bank.loc[self.w_bank['words'].str[i]!=s.lower()]
+            self.y_letters = {}
+        for i, s in enumerate(self.prediction):
+            if s != '':
+                self.w_bank = self.w_bank.loc[self.w_bank['words'].str[i]==s.lower()]
+        self.w_bank.loc[:, ('w-score')] = [0] * len(self.w_bank)
+        if len(self.w_bank) > 5:
+            self.calc_letter_probs() #Recalculate letter position probability
         for x in range(self.WORDLE.letters):
             if self.prediction[x] == '':
-                self.word_bank['w-score'] += self.word_bank[f'p-{x}']
+                self.w_bank.loc[:, ('w-score')] += self.w_bank[f'p-{x}']
+        
         if True not in [True for s in self.prediction if s in self.vowels]:
-            self.word_bank['w-score'] += self.word_bank['v-count'] / self.WORDLE.letters
+            self.w_bank.loc[:, ('w-score')] += self.w_bank.loc[:, ('v-count')] / self.WORDLE.letters
     def _get_reward(self):
         self.word_score()
-        new_reward = np.nan_to_num(self.word_bank.at[self.current_guess, 'w-score'])
+        new_reward = np.nan_to_num(self.w_bank.at[self.word_bank.at[self.current_guess, 'words'], 'w-score']) if self.word_bank.at[self.current_guess, 'words'] in self.w_bank.values else 0
         result, tries = self.WORDLE.game_result()
         rewards = np.zeros(5)
         #heavily penealize guessing the same word multiple times
@@ -180,7 +199,6 @@ class WordleEnvEasy(gym.Env):
         if self.logging:
             print(self.WORD)
             print(rewards)
-            print(reward)
             print(new_reward)
         return new_reward
 
