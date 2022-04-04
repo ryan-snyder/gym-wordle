@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.0 (2022-04-04)
+### Feature
+* Changed reward to use word probability ([`afed208`](https://github.com/ryan-snyder/gym-wordle/commit/afed20852be20a3fe826a789137223bde5a64a3e))
+
 ## v0.3.3 (2022-04-04)
 ### Fix
 * Adjusting reward scale ([`21a1ddb`](https://github.com/ryan-snyder/gym-wordle/commit/21a1ddb0979e1453dd7bfdc96bd41fe51f2d9403))
