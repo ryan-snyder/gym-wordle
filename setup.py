@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 with open('README.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
-
+__version__ = '0.2.5'
 setup(name='alt_gym_wordle',
-    version='0.2.5',
+    version=__version__,
     author='Ryan Snyder',
     description='OpenAI gym environment for training agents on Wordle',
     long_description=long_description,
