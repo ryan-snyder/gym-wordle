@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-#bump
+
 with open('README.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
 __version__ = '0.3.0'
