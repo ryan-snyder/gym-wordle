@@ -136,7 +136,7 @@ class WordleEnvEasy(gym.Env):
         if len(self.rewards) > 1:
             previous_reward =self.rewards[-1]
             if previous_reward > reward:
-                reward = reward / 2
+                reward = (reward / 2) - previous_reward
         return reward
 
     def _get_observation(self):
