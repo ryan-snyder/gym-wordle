@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.1 (2022-04-04)
+### Fix
+* Removed print ([`3c84f5c`](https://github.com/ryan-snyder/gym-wordle/commit/3c84f5ca0ecdedbd212181eef96f757a2f21fa44))
+* Fixed word probability calculation ([`ebfb240`](https://github.com/ryan-snyder/gym-wordle/commit/ebfb2401fdf2a81e8bf7d79f42552a86255cb392))
+
 ## v0.4.0 (2022-04-04)
 ### Feature
 * Changed reward to use word probability ([`afed208`](https://github.com/ryan-snyder/gym-wordle/commit/afed20852be20a3fe826a789137223bde5a64a3e))
