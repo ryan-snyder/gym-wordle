@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.2 (2022-04-04)
+### Fix
+* Added scoring for first guess ([`211e0ef`](https://github.com/ryan-snyder/gym-wordle/commit/211e0ef473a3a2da8797a4c7d7174651e29cd60d))
+
 ## v0.4.1 (2022-04-04)
 ### Fix
 * Removed print ([`3c84f5c`](https://github.com/ryan-snyder/gym-wordle/commit/3c84f5ca0ecdedbd212181eef96f757a2f21fa44))
