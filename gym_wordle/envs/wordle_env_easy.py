@@ -143,7 +143,6 @@ class WordleEnvEasy(gym.Env):
         self.prediction = ['' for _ in range(self.WORDLE.letters)]
         self.parse_board()
         if len(self.g_letters) > 0:
-            print(self.w_bank)
             self.w_bank = self.w_bank.loc[~self.w_bank['words'].str.contains('|'.join(self.g_letters).lower())]
             self.g_letters = []
         if len(self.y_letters) > 0:
