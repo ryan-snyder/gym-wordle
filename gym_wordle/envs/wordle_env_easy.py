@@ -223,4 +223,4 @@ class WordleEnvEasy(gym.Env):
         convertcolortonum = lambda color: [self.colors.index(c)+27 for c in color]
         guesses = np.array([convertletterstonum(l) if i <=5 else convertcolortonum(l) for i, l in enumerate(results)])
         guesses3d = np.expand_dims(guesses, axis=0)
-        return guesses3d
+        return { 'observation': guesses3d, 'achieved_goal': guesses3d}
