@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.9 (2022-04-06)
+### Fix
+* Adju sted new reward for guessing the same word ([`6508212`](https://github.com/ryan-snyder/gym-wordle/commit/6508212d0b19df95b87b67e5a3d075a4412579a1))
+
 ## v0.6.8 (2022-04-06)
 ### Fix
 * Add compute_reward ([`559cf46`](https://github.com/ryan-snyder/gym-wordle/commit/559cf461a0c5727a33c21aaee90cdf68491098c3))
