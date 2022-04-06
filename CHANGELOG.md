@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.0 (2022-04-06)
+### Feature
+* Changed observation space to dict ([`2a292a3`](https://github.com/ryan-snyder/gym-wordle/commit/2a292a3316ee963ef2cbb8d5a60a4421661f67e6))
+
 ## v0.4.8 (2022-04-06)
 ### Fix
 * Fixed bug ([`98b75ec`](https://github.com/ryan-snyder/gym-wordle/commit/98b75ec3d3d5119bf2118d950a548e5e0286f2fc))
