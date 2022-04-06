@@ -55,7 +55,7 @@ class WordleEnvEasy(gym.Env):
         self.observation_space = spaces.Dict({
             'observation': spaces.Box(low=0, high=29, shape=(12,5), dtype='int32'),
             'achieved_goal': spaces.Box(low=27, high=29, shape=(5,), dtype='int32'),
-            'desiered_goal': spaces.Box(low=27, high=29, shape=(5,), dtype='int32')
+            'desired_goal': spaces.Box(low=27, high=29, shape=(5,), dtype='int32')
         })
         self.current_episode = -1
         self.episode_memory: List[Any] = []
