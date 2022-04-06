@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.2 (2022-04-06)
+### Fix
+* Fixed error ([`c816f4d`](https://github.com/ryan-snyder/gym-wordle/commit/c816f4d5c96d0b05fc0c5131077b1ced5eb6f6cd))
+
 ## v0.6.1 (2022-04-06)
 ### Fix
 * Fixing dict for her replay ([`da1201a`](https://github.com/ryan-snyder/gym-wordle/commit/da1201a860cf1818a30550cdce9b7e9c37426bc4))
