@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.7 (2022-04-06)
+### Fix
+* Fix spelling mistake ([`82d6900`](https://github.com/ryan-snyder/gym-wordle/commit/82d690002d1c1f0672234c3868862efa152f0a3e))
+
 ## v0.6.6 (2022-04-06)
 ### Fix
 * Adjusted achieved goal and desired goal ([`e332979`](https://github.com/ryan-snyder/gym-wordle/commit/e33297914a34b0df627f6e83adf408d493eb475c))
