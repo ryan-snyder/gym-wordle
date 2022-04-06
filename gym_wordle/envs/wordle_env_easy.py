@@ -204,10 +204,10 @@ class WordleEnvEasy(gym.Env):
             word = self.WORDLE.board[g]
             current = ''.join(word)
             if current in self.guessed_words:
-                return 0
+                new_reward -= 5
             for l in word: 
                 if l in self.blank_letters:
-                    reward -= 0.5
+                    new_reward -= 0.5
         if self.logging:
             print(self.WORD)
             print(rewards)
