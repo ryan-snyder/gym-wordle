@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.4 (2022-04-06)
+### Fix
+* Fixed observation space ([`8786195`](https://github.com/ryan-snyder/gym-wordle/commit/8786195ac5e312a72fddc9a94dccd956f29194fa))
+
 ## v0.6.3 (2022-04-06)
 ### Fix
 * Added back support for discrete action ([`55b15b0`](https://github.com/ryan-snyder/gym-wordle/commit/55b15b0d468880c98ad988f6b04d53720ee7289c))
