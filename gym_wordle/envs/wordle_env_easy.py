@@ -51,14 +51,8 @@ class WordleEnvEasy(gym.Env):
         # since right now its on a 0-29 scale instead of a 0-1.
         #self.observation_space = spaces.Box(low=0, high=29, shape=(1,12,5), dtype='int32')
         self.observation_space = spaces.Dict({
-            'observation': spaces.Dict({ 
-                'guesses': spaces.Box(low=0, high=26, shape=(6,5), dtype='int32'),
-                'colors': spaces.Box(low=0, high=2, shape=(6,5), dtype='int32')
-            }),
-            'achieved_goal': spaces.Dict({ 
-                'guesses': spaces.Box(low=0, high=26, shape=(6,5), dtype='int32'),
-                'colors': spaces.Box(low=0, high=2, shape=(6,5), dtype='int32')
-            })
+            'observation': spaces.Box(low=0, high=29, shape=(1,12,5), dtype='int32'),
+            'achieved_goal': spaces.Box(low=0, high=29, shape=(1,12,5), dtype='int32')
         })
         self.current_episode = -1
         self.episode_memory: List[Any] = []
@@ -224,8 +218,7 @@ class WordleEnvEasy(gym.Env):
         colors = np.array(self.WORDLE.colours) #2d array of 5x6
         results = np.vstack((board, colors)) #stacks boards and colors by rows resulting in a 2d array of 5x12
         convertletterstonum = lambda letter: [self.alpha.index(l) + 1 if l in self.alpha else 0 for l in letter]
-        convertcolortonum = lambda color: [self.colors.index(c) for c in color]
-        guesses = np.array([convertletterstonum(l) for l in board])
-        colors = np.array([convertcolortonum(c) for c in colors])
-        #guesses3d = np.expand_dims(guesses, axis=0)
-        return {'observation': { 'guesses': guesses, 'colors': colors } }
+        convertcolortonum = lambda color: [self.colors.index(c)+27 for c in color]
+        guesses = np.array([convertletterstonum(l) if i <=5 else convertcolortonum(l) for i, l in enumerate(results)])
+        guesses3d = np.expand_dims(guesses, axis=0)
+        return guesses3d
