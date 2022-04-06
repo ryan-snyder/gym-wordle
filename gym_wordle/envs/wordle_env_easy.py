@@ -16,7 +16,7 @@ class WordleEnvEasy(gym.Env):
     OUTLINE = "#d3d6da"
     FILLED_OUTLINE = "#878a8c"
 
-    def __init__(self, logging=False):
+    def __init__(self, logging=False, action_type='Discrete'):
         current_dir = os.path.dirname(os.path.realpath(__file__))
         self.logging = logging
         self.answers = pd.read_csv('{}/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words'])
@@ -38,10 +38,12 @@ class WordleEnvEasy(gym.Env):
         self.word_bank.loc[:,'v-count'] = self.word_bank.loc[:,'words'].str.lower().str.count(r'[aeiou]') #Count amount of vowels in words
         # our action space is the total amount of possible words to guess
         self.w_bank = self.word_bank
-        #self.action_space = spaces.Discrete(2315)
+        if action_type == 'Discrete':
+            self.action_space = spaces.Discrete(2315)
+        else:
         # TODO: change this to provide x guesses, and choose the one which scores the highest?
         # or is that too forgiving
-        self.action_space = spaces.Box(low=0, high=2315, shape=(1,), dtype='int32')
+            self.action_space = spaces.Box(low=0, high=2315, shape=(1,), dtype='int32')
         #our observation space is the current wordle board in form of (letter, color) with 5x6 (5 letters, 6 guesses)
         #modified to work with gym/baselines
         #same thing basically, only 0-26 is '' to z and 27-29 is B, Y, G
@@ -65,7 +67,7 @@ class WordleEnvEasy(gym.Env):
         reward = self._get_reward()
         self.rewards.append(reward)
         observation = self._get_observation()
-        if self.word_bank['words'].to_list()[self.current_guess[0]] == self.WORD.lower():
+        if self.word_bank['words'].to_list()[self.current_guess] == self.WORD.lower():
             print(self.rewards)
             print(np.mean(np.array(self.rewards)))
         return observation, reward, self.is_game_over, {}
@@ -112,7 +114,7 @@ class WordleEnvEasy(gym.Env):
     def _take_action(self, action):
         # turn action into guess
         print(action)
-        guess = self.word_bank['words'].to_list()[action[0]]
+        guess = self.word_bank['words'].to_list()[action]
         self.episode_memory[self.current_episode].append(guess)
         self.guessed_words.append(guess)
         self.current_guess = action
@@ -181,8 +183,8 @@ class WordleEnvEasy(gym.Env):
     def _get_reward(self):
         if self.WORDLE.g_count > 1:
             self.word_score()
-        guess = self.word_bank['words'].to_list()[self.current_guess[0]]
-        new_reward = np.nan_to_num(self.w_bank.loc[self.current_guess[0], 'w-score']) if guess in self.w_bank.values else 0
+        guess = self.word_bank['words'].to_list()[self.current_guess]
+        new_reward = np.nan_to_num(self.w_bank.loc[self.current_guess, 'w-score']) if guess in self.w_bank.values else 0
         result, tries = self.WORDLE.game_result()
         rewards = np.zeros(5)
         #heavily penealize guessing the same word multiple times
