@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.5 (2022-04-06)
+### Fix
+* Adjusting reward for getting correct word ([`86e7eb6`](https://github.com/ryan-snyder/gym-wordle/commit/86e7eb697637f7b4076baacbf577af86333b7a42))
+
 ## v0.4.4 (2022-04-06)
 ### Fix
 * Fixed panda warning ([`dc2f038`](https://github.com/ryan-snyder/gym-wordle/commit/dc2f03810af312e834394fa2b330c39f00aa712f))
