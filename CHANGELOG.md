@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.7 (2022-04-06)
+### Fix
+* Adding logging for reward and increasing rewards ([`5b72972`](https://github.com/ryan-snyder/gym-wordle/commit/5b729727556ac9f4415a7b4d5036c10c954a083d))
+
 ## v0.4.6 (2022-04-06)
 ### Fix
 * Increased reward for correct guess ([`4d63f2c`](https://github.com/ryan-snyder/gym-wordle/commit/4d63f2c6162680feec2348b4d108eb7becf5bbbc))
