@@ -110,7 +110,7 @@ class WordleEnvEasy(gym.Env):
         self.WORDLE.update_board(guess)
         res = self.WORDLE.colours[self.WORDLE.g_count-1]
         self.blank_letters.extend([ l for i,l in enumerate(guess) if res[i] == 'B' and l not in self.blank_letters])
-        self.is_game_over = self.WORDLE.word == guess or self.WORDLE.g_count == self.GUESSES
+        self.is_game_over = self.WORDLE.word.lower() == guess or self.WORDLE.g_count == self.GUESSES
     def calc_letter_probs(self):
         for x in range(self.WORDLE.letters):
             counts = self.w_bank.loc[:, ('words')].str[x].value_counts(normalize=True).to_dict()
@@ -192,11 +192,6 @@ class WordleEnvEasy(gym.Env):
             for l in word: 
                 if l in self.blank_letters:
                     reward -= 0.5
-        
-        if len(self.rewards) > 1:
-            previous_reward =self.rewards[-1]
-            if previous_reward > reward:
-                reward = (reward / 2) - previous_reward
         if self.logging:
             print(self.WORD)
             print(rewards)
