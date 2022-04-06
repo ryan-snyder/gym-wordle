@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.6 (2022-04-06)
+### Fix
+* Increased reward for correct guess ([`4d63f2c`](https://github.com/ryan-snyder/gym-wordle/commit/4d63f2c6162680feec2348b4d108eb7becf5bbbc))
+
 ## v0.4.5 (2022-04-06)
 ### Fix
 * Adjusting reward for getting correct word ([`86e7eb6`](https://github.com/ryan-snyder/gym-wordle/commit/86e7eb697637f7b4076baacbf577af86333b7a42))
