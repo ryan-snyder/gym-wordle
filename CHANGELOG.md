@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.5 (2022-04-06)
+### Fix
+* Removed print ([`598ce5a`](https://github.com/ryan-snyder/gym-wordle/commit/598ce5a1ba0e90c1fdd3eccf33ec763815d855b1))
+
 ## v0.6.4 (2022-04-06)
 ### Fix
 * Fixed observation space ([`8786195`](https://github.com/ryan-snyder/gym-wordle/commit/8786195ac5e312a72fddc9a94dccd956f29194fa))
