@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.4 (2022-04-06)
+### Fix
+* Fixed panda warning ([`dc2f038`](https://github.com/ryan-snyder/gym-wordle/commit/dc2f03810af312e834394fa2b330c39f00aa712f))
+
 ## v0.4.3 (2022-04-06)
 ### Fix
 * Fixed game over condition ([`8f7ae3e`](https://github.com/ryan-snyder/gym-wordle/commit/8f7ae3e2b7ed16b647608dcc31c3063277aa233f))
