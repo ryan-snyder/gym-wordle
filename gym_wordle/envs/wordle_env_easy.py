@@ -35,7 +35,7 @@ class WordleEnvEasy(gym.Env):
         self.vowels = ['A','E','I','O','U','Y']
         file_names = ['{}/wordle-answers-alphabetical.txt'.format(current_dir)]
         self.word_bank = pd.concat((pd.read_csv(f, header=None, names=['words']) for f in file_names), ignore_index=True).sort_values('words')
-        self.word_bank['v-count'] = self.word_bank['words'].str.lower().str.count(r'[aeiou]') #Count amount of vowels in words
+        self.word_bank['v-count'] = self.word_bank.loc[:,'words'].str.lower().str.count(r'[aeiou]') #Count amount of vowels in words
         # our action space is the total amount of possible words to guess
         self.w_bank = self.word_bank
         self.action_space = spaces.Discrete(2315)
@@ -64,7 +64,7 @@ class WordleEnvEasy(gym.Env):
         self.current_episode = -1
         self.episode_memory.append([])
         self.is_game_over = False
-        self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
+        self.WORD = self.answers.loc[:,'words'].sample(n=1).tolist()[0].upper()
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
         self.guessed_words = []
         self.blank_letters = []
