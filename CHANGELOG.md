@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.3 (2022-04-06)
+### Fix
+* Fixed game over condition ([`8f7ae3e`](https://github.com/ryan-snyder/gym-wordle/commit/8f7ae3e2b7ed16b647608dcc31c3063277aa233f))
+
 ## v0.4.2 (2022-04-04)
 ### Fix
 * Added scoring for first guess ([`211e0ef`](https://github.com/ryan-snyder/gym-wordle/commit/211e0ef473a3a2da8797a4c7d7174651e29cd60d))
