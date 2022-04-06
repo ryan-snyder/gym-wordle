@@ -58,6 +58,9 @@ class WordleEnvEasy(gym.Env):
         reward = self._get_reward()
         self.rewards.append(reward)
         observation = self._get_observation()
+        if self.is_game_over:
+            print(rewards)
+            print(np.mean(np.array(rewards)))
         return observation, reward, self.is_game_over, {}
 
     def reset(self):
@@ -199,7 +202,7 @@ class WordleEnvEasy(gym.Env):
             print(rewards)
             print(new_reward)
         
-        new_reward += 10 if self.current_guess == self.WORD.lower() else 0
+        new_reward += 30 - (tries*5) if self.current_guess == self.WORD.lower() else 0
         return new_reward
 
     def _get_observation(self):
