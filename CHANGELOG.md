@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.6 (2022-04-06)
+### Fix
+* Adjusted achieved goal and desired goal ([`e332979`](https://github.com/ryan-snyder/gym-wordle/commit/e33297914a34b0df627f6e83adf408d493eb475c))
+
 ## v0.6.5 (2022-04-06)
 ### Fix
 * Removed print ([`598ce5a`](https://github.com/ryan-snyder/gym-wordle/commit/598ce5a1ba0e90c1fdd3eccf33ec763815d855b1))
