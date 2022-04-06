@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.1 (2022-04-06)
+### Fix
+* Fixing dict for her replay ([`da1201a`](https://github.com/ryan-snyder/gym-wordle/commit/da1201a860cf1818a30550cdce9b7e9c37426bc4))
+
 ## v0.6.0 (2022-04-06)
 ### Feature
 * Changed action space to box ([`f7620e1`](https://github.com/ryan-snyder/gym-wordle/commit/f7620e171cb57aebad91e7f93ba6c842659d6327))
