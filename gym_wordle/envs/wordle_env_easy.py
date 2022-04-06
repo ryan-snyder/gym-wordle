@@ -53,8 +53,9 @@ class WordleEnvEasy(gym.Env):
         # since right now its on a 0-29 scale instead of a 0-1.
         #self.observation_space = spaces.Box(low=0, high=29, shape=(1,12,5), dtype='int32')
         self.observation_space = spaces.Dict({
-            'observation': spaces.Box(low=0, high=29, shape=(1,12,5), dtype='int32'),
-            'achieved_goal': spaces.Box(low=0, high=29, shape=(1,12,5), dtype='int32')
+            'observation': spaces.Box(low=0, high=29, shape=(12,5), dtype='int32'),
+            'achieved_goal': spaces.Box(low=27, high=29, shape=(5,), dtype='int32'),
+            'desiered_goal': spaces.Box(low=27, high=29, shape=(5,), dtype='int32')
         })
         self.current_episode = -1
         self.episode_memory: List[Any] = []
@@ -221,5 +222,6 @@ class WordleEnvEasy(gym.Env):
         convertletterstonum = lambda letter: [self.alpha.index(l) + 1 if l in self.alpha else 0 for l in letter]
         convertcolortonum = lambda color: [self.colors.index(c)+27 for c in color]
         guesses = np.array([convertletterstonum(l) if i <=5 else convertcolortonum(l) for i, l in enumerate(results)])
-        guesses3d = np.expand_dims(guesses, axis=0)
-        return { 'observation': guesses3d, 'achieved_goal': guesses3d}
+        colors = np.array([convertcolortonum(colors[self.WORDLE.g_count-1])])
+        #guesses3d = np.expand_dims(guesses, axis=0)
+        return { 'observation': guesses, 'achieved_goal': colors, 'desired_goal': [29,29,29,29,29]}
