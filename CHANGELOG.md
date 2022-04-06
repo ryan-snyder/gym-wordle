@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.8 (2022-04-06)
+### Fix
+* Add compute_reward ([`559cf46`](https://github.com/ryan-snyder/gym-wordle/commit/559cf461a0c5727a33c21aaee90cdf68491098c3))
+
 ## v0.6.7 (2022-04-06)
 ### Fix
 * Fix spelling mistake ([`82d6900`](https://github.com/ryan-snyder/gym-wordle/commit/82d690002d1c1f0672234c3868862efa152f0a3e))
