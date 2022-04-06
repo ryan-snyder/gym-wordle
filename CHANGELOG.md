@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.8 (2022-04-06)
+### Fix
+* Fixed bug ([`98b75ec`](https://github.com/ryan-snyder/gym-wordle/commit/98b75ec3d3d5119bf2118d950a548e5e0286f2fc))
+
 ## v0.4.7 (2022-04-06)
 ### Fix
 * Adding logging for reward and increasing rewards ([`5b72972`](https://github.com/ryan-snyder/gym-wordle/commit/5b729727556ac9f4415a7b4d5036c10c954a083d))
