@@ -58,9 +58,9 @@ class WordleEnvEasy(gym.Env):
         reward = self._get_reward()
         self.rewards.append(reward)
         observation = self._get_observation()
-        if self.is_game_over:
-            print(rewards)
-            print(np.mean(np.array(rewards)))
+        if self.word_bank['words'].to_list()[self.current_guess] == self.WORD.lower():
+            print(self.rewards)
+            print(np.mean(np.array(self.rewards)))
         return observation, reward, self.is_game_over, {}
 
     def reset(self):
@@ -173,7 +173,8 @@ class WordleEnvEasy(gym.Env):
     def _get_reward(self):
         if self.WORDLE.g_count > 1:
             self.word_score()
-        new_reward = np.nan_to_num(self.w_bank.loc[self.current_guess, 'w-score']) if self.word_bank['words'].to_list()[self.current_guess] in self.w_bank.values else 0
+        guess = self.word_bank['words'].to_list()[self.current_guess]
+        new_reward = np.nan_to_num(self.w_bank.loc[self.current_guess, 'w-score']) if guess in self.w_bank.values else 0
         result, tries = self.WORDLE.game_result()
         rewards = np.zeros(5)
         #heavily penealize guessing the same word multiple times
@@ -201,8 +202,7 @@ class WordleEnvEasy(gym.Env):
             print(self.WORD)
             print(rewards)
             print(new_reward)
-        
-        new_reward += 30 - (tries*5) if self.current_guess == self.WORD.lower() else 0
+        new_reward += 30 - (tries*5) if guess == self.WORD.lower() else 0
         return new_reward
 
     def _get_observation(self):
