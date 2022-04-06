@@ -113,7 +113,6 @@ class WordleEnvEasy(gym.Env):
 
     def _take_action(self, action):
         # turn action into guess
-        print(action)
         guess = self.word_bank['words'].to_list()[action]
         self.episode_memory[self.current_episode].append(guess)
         self.guessed_words.append(guess)
