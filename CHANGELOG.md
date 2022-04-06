@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.0 (2022-04-06)
+### Feature
+* Changed action space to box ([`f7620e1`](https://github.com/ryan-snyder/gym-wordle/commit/f7620e171cb57aebad91e7f93ba6c842659d6327))
+
 ## v0.5.0 (2022-04-06)
 ### Feature
 * Changed observation space to dict ([`2a292a3`](https://github.com/ryan-snyder/gym-wordle/commit/2a292a3316ee963ef2cbb8d5a60a4421661f67e6))
