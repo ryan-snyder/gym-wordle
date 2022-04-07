@@ -220,7 +220,14 @@ class WordleEnvEasy(gym.Env):
                 rewards[i] = 2
             elif c == self.colors[1]:
                 rewards[i] = 1
-        new_reward += 30 - ((self.WORDLE.g_count-1)*5) if guess == self.WORD.lower() else 0
+        for g in range(self.WORDLE.g_count):
+            word = self.WORDLE.board[g]
+            current = ''.join(word)
+            if current.lower() in self.guessed_words:
+                new_reward -= 1000
+            for l in current.lower(): 
+                if l in self.blank_letters:
+                    new_reward -= 0.5
         if self.logging:
             print(self.WORD)
             print(guess)
