@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.12 (2022-04-07)
+### Fix
+* Corrected action mask ([`36b707c`](https://github.com/ryan-snyder/gym-wordle/commit/36b707c019eef55c80f8e42a794d50e775520a1c))
+
 ## v0.6.11 (2022-04-07)
 ### Fix
 * Fixed typo ([`28d0cce`](https://github.com/ryan-snyder/gym-wordle/commit/28d0cce97a9f51656c2395cf64708adcb8c12fe9))
