@@ -29,7 +29,7 @@ class WordleEnvEasy(gym.Env):
         self.alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
         self.colors = ['B', 'Y', 'G']
         self.is_game_over = False
-        self.guessed_words = {}
+        self.guessed_words = []
         self.blank_letters = []
         self.rewards = []
         self.vowels = ['A','E','I','O','U']
@@ -79,7 +79,7 @@ class WordleEnvEasy(gym.Env):
         self.is_game_over = False
         self.WORD = self.answers.loc[:,'words'].sample(n=1).tolist()[0].upper()
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
-        self.guessed_words = {}
+        self.guessed_words = []
         self.blank_letters = []
         self.rewards = []
         self.g_letters = []
@@ -116,7 +116,7 @@ class WordleEnvEasy(gym.Env):
         # turn action into guess
         guess = self.word_bank['words'].to_list()[action]
         self.episode_memory[self.current_episode].append(guess)
-        self.guessed_words[self.WORDLE.g_count] = { 'guess': guess, 'action': action}
+        self.guessed_words.append(guess)
         self.current_guess = action
         if self.logging:
             print(guess)
@@ -206,7 +206,7 @@ class WordleEnvEasy(gym.Env):
             current = ''.join(word)
             for l in current.lower(): 
                 if l in self.blank_letters:
-                    new_reward -= 0.5
+                    new_reward -= 0.05
         if self.logging:
             print(self.WORD)
             print(rewards)
@@ -214,7 +214,9 @@ class WordleEnvEasy(gym.Env):
         new_reward += 30 - (tries*5) if guess == self.WORD.lower() else 0
         return new_reward
     def action_masks(self):
-        return [self.guessed_words[key]['action'] for key in self.guessed_words.keys()]
+        action_mask = [w in self.guessed_words for w in self.word_bank['words'].tolist()]
+        #action_mask = [self.guessed_words[key]['action'] for key in self.guessed_words.keys()]
+        return action_mask
     # TODO: adjust get reward and compute reward to take into account the desired goal
     # But i think this is fine for right now, since our _get_reward does take into account our desired goal
     def compute_reward(self, achieved_goal, desired_goal, info):
