@@ -87,7 +87,6 @@ class WordleEnvEasy(gym.Env):
             self.is_game_over = True
             reward = -10
         self.rewards.append(reward)
-        print(reward)
         return observation, reward, self.is_game_over, {}
 
     def reset(self):
