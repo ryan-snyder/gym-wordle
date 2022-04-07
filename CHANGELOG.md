@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.10 (2022-04-07)
+### Fix
+* Fixed some errors and added action masking for maskable ppo ([`44847df`](https://github.com/ryan-snyder/gym-wordle/commit/44847dfb96c4247e411372d7140b3d1ccb1de3fb))
+
 ## v0.6.9 (2022-04-06)
 ### Fix
 * Adju sted new reward for guessing the same word ([`6508212`](https://github.com/ryan-snyder/gym-wordle/commit/6508212d0b19df95b87b67e5a3d075a4412579a1))
