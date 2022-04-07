@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.9 (2022-04-07)
+### Fix
+* Changing shape ([`6855940`](https://github.com/ryan-snyder/gym-wordle/commit/6855940b8d5282efbb9f25d9ad4d696c6a8dc004))
+
 ## v0.7.8 (2022-04-07)
 ### Fix
 * Fixing her goals ([`331e467`](https://github.com/ryan-snyder/gym-wordle/commit/331e46776836f299748be922f310e7ec867bd0f3))
