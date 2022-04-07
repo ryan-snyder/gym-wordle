@@ -232,7 +232,10 @@ class WordleEnvEasy(gym.Env):
     # TODO: adjust get reward and compute reward to take into account the desired goal
     # But i think this is fine for right now, since our _get_reward does take into account our desired goal
     def compute_reward(self, achieved_goal, desired_goal, info):
-        return self._get_reward()
+        reward = 5
+        for goal in range(5):
+            reward -= desired_goal[goal] -achieved_goal[goal]
+        return reward
 
     def _get_observation(self):
         board = np.array(self.WORDLE.board) #2d array of 5x6
@@ -241,6 +244,6 @@ class WordleEnvEasy(gym.Env):
         convertletterstonum = lambda letter: [self.alpha.index(l) + 1 if l in self.alpha else 0 for l in letter]
         convertcolortonum = lambda color: [self.colors.index(c)+27 for c in color]
         guesses = np.array([convertletterstonum(l) if i <=5 else convertcolortonum(l) for i, l in enumerate(results)])
-        colors = np.array([convertcolortonum(colors[self.WORDLE.g_count-1])])
+        colors = np.array(convertcolortonum(colors[self.WORDLE.g_count-1]))
         #guesses3d = np.expand_dims(guesses, axis=0)
         return { 'observation': guesses, 'achieved_goal': colors, 'desired_goal': [29,29,29,29,29]}
