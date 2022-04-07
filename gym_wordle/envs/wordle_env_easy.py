@@ -63,7 +63,7 @@ class WordleEnvEasy(gym.Env):
         self.observation_space = spaces.Dict({
             'observation': spaces.Box(low=0, high=29, shape=(12,5), dtype='int32'),
             'achieved_goal': spaces.Box(low=27, high=29, shape=(5,), dtype='int32'),
-            'desired_goal': spaces.Box(low=27, high=29, shape=(5,), dtype='int32')
+            'desired_goal': spaces.Box(low=29, high=29, shape=(5,), dtype='int32')
         })
         self.current_episode = -1
         self.episode_memory: List[Any] = []
@@ -76,16 +76,12 @@ class WordleEnvEasy(gym.Env):
         observation = self._get_observation()
         if self.word_bank['words'].to_list()[self.current_guess] == self.WORD.lower():
             self.is_game_over = True
-            if self.WORDLE.g_count > 1:
-                reward += 10
         elif self.WORDLE.g_count == self.GUESSES:
             self.is_game_over = True
-            reward = -10
         reward += self._get_reward()
         self.rewards.append(reward)
         if self.logging:
             print(self.WORD)
-            print(self.guessed_words)
             print(self.rewards)
         return observation, reward, self.is_game_over, {}
 
@@ -201,33 +197,14 @@ class WordleEnvEasy(gym.Env):
         if True not in [True for s in self.prediction if s in self.vowels]:
             self.w_bank.loc[:, ('w-score')] += self.w_bank.loc[:, ('v-count')] / self.WORDLE.letters
     def _get_reward(self):
-        if self.WORDLE.g_count > 1:
-            self.word_score()
-        guess = self.word_bank['words'].to_list()[self.current_guess]
-        new_reward = np.nan_to_num(self.w_bank.loc[self.current_guess, 'w-score']) if guess in self.w_bank.values else 0
-        rewards = np.zeros(5)
-        #heavily penealize guessing the same word multiple times
-        #If a word isn't the right guess, we shouldn't guess it again
-        #could do the same thing for letters, as if a letter is blank(grey)
-        # then the only reason to use a word with a letter in it
-        # is to check other letter posistions
-        #so it shouldn't be a heavy penalty but it should be a penalty
-        for i,c in enumerate(self.WORDLE.colours[self.WORDLE.g_count-1]):
-            if c == self.colors[2]:
-                rewards[i] = 2
-            elif c == self.colors[1]:
-                rewards[i] = 1
-        for g in range(self.WORDLE.g_count):
-            word = self.WORDLE.board[g]
-            current = ''.join(word)
-            if self.guessed_words.count(current.lower) > 1:
-                new_reward -= 1000
-            for l in current.lower(): 
-                if l in self.blank_letters:
-                    new_reward -= 0.005
+        new_reward = 0
+        if self.word_bank['words'].to_list()[self.current_guess] == self.WORD.lower():
+            if self.WORDLE.g_count > 1:
+                new_reward = 10
+        elif self.WORDLE.g_count == self.GUESSES:
+            new_reward = -10
         if self.logging:
             print(self.WORD)
-            print(guess)
             print(new_reward)
         return new_reward
     def action_masks(self):
