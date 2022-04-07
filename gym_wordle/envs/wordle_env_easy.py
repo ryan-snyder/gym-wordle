@@ -16,15 +16,22 @@ class WordleEnvEasy(gym.Env):
     OUTLINE = "#d3d6da"
     FILLED_OUTLINE = "#878a8c"
 
-    def __init__(self, logging=False, action_type='Discrete'):
+    def __init__(self, logging=False, action_type='Discrete', words=100, random=False):
         current_dir = os.path.dirname(os.path.realpath(__file__))
         self.logging = logging
-        self.answers = pd.read_csv('{}/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words'])
+        self.random = random
         self.screen = None
         self.isopen = False
         self.GUESSES = 6
         self.LETTERS = 5
-        self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
+        if random:
+            print('using random solution set and random solution, of size: ', words)
+            self.answers = pd.read_csv('{}/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words']).sample(n=words, ignore_index=True)
+            self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
+        else:
+            print('using same solution set and same solution, of size: ', words)
+            self.answers = pd.read_csv('{}/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words']).sort_values('words').head(words)
+            self.WORD = self.answers['words'].tolist()[0]
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
         self.alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
         self.colors = ['B', 'Y', 'G']
@@ -34,12 +41,13 @@ class WordleEnvEasy(gym.Env):
         self.rewards = []
         self.vowels = ['A','E','I','O','U']
         file_names = ['{}/wordle-answers-alphabetical.txt'.format(current_dir)]
-        self.word_bank = pd.concat((pd.read_csv(f, header=None, names=['words']) for f in file_names), ignore_index=True).sort_values('words')
+        #self.word_bank = pd.concat((pd.read_csv(f, header=None, names=['words']) for f in file_names), ignore_index=True).sort_values('words')
+        self.word_bank = self.answers
         self.word_bank.loc[:,'v-count'] = self.word_bank.loc[:,'words'].str.lower().str.count(r'[aeiou]') #Count amount of vowels in words
         # our action space is the total amount of possible words to guess
         self.w_bank = self.word_bank
         if action_type == 'Discrete':
-            self.action_space = spaces.Discrete(2315)
+            self.action_space = spaces.Discrete(words)
         else:
         # TODO: change this to provide x guesses, and choose the one which scores the highest?
         # or is that too forgiving
@@ -77,7 +85,10 @@ class WordleEnvEasy(gym.Env):
         self.current_episode = -1
         self.episode_memory.append([])
         self.is_game_over = False
-        self.WORD = self.answers.loc[:,'words'].sample(n=1).tolist()[0].upper()
+        if self.random:
+            self.WORD = self.answers.loc[:,'words'].sample(n=1).tolist()[0].upper()
+        else:
+            self.WORD = self.answers['words'].tolist()[0]
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
         self.guessed_words = []
         self.blank_letters = []
@@ -186,6 +197,8 @@ class WordleEnvEasy(gym.Env):
         if self.WORDLE.g_count > 1:
             self.word_score()
         guess = self.word_bank['words'].to_list()[self.current_guess]
+        print(guess)
+        print(self.current_guess)
         new_reward = np.nan_to_num(self.w_bank.loc[self.current_guess, 'w-score']) if guess in self.w_bank.values else 0
         result, tries = self.WORDLE.game_result()
         rewards = np.zeros(5)
