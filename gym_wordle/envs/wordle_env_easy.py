@@ -29,9 +29,9 @@ class WordleEnvEasy(gym.Env):
             self.answers = pd.read_csv('{}/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words']).sample(n=words, ignore_index=True)
             self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
         else:
-            print('using same solution set and same solution, of size: ', words)
+            print('using same solution set and random solution, of size: ', words)
             self.answers = pd.read_csv('{}/wordle-answers-alphabetical.txt'.format(current_dir), header=None, names=['words']).sort_values('words').head(words)
-            self.WORD = self.answers['words'].tolist()[0]
+            self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
         self.alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
         self.colors = ['B', 'Y', 'G']
@@ -71,7 +71,6 @@ class WordleEnvEasy(gym.Env):
     def step(self, action):
         if self.is_game_over:
             return RuntimeError('Episode is already done')
-        self.word_score()
         self._take_action(action)
         reward = 0
         observation = self._get_observation()
@@ -87,6 +86,10 @@ class WordleEnvEasy(gym.Env):
             self.is_game_over = True
             reward = -10
         self.rewards.append(reward)
+        if self.logging:
+            print(self.WORD)
+            print(self.guessed_words)
+            print(self.rewards)
         return observation, reward, self.is_game_over, {}
 
     def reset(self):
@@ -96,7 +99,7 @@ class WordleEnvEasy(gym.Env):
         if self.random:
             self.WORD = self.answers.loc[:,'words'].sample(n=1).tolist()[0].upper()
         else:
-            self.WORD = self.answers['words'].tolist()[0]
+            self.WORD = self.answers['words'].sample(n=1).tolist()[0].upper()
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
         self.guessed_words = []
         self.blank_letters = []
@@ -144,6 +147,7 @@ class WordleEnvEasy(gym.Env):
                 self.blank_letters.append(l)
         if self.WORDLE.word.lower() == guess:
             print('~~~~~~AGENT GOT IT RIGHT~~~~~~')
+            print(self.guessed_words)
     def calc_letter_probs(self):
         for x in range(self.WORDLE.letters):
             counts = self.w_bank.loc[:, ('words')].str[x].value_counts(normalize=True).to_dict()
