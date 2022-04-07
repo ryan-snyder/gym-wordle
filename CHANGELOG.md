@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.4 (2022-04-07)
+### Fix
+* Adjusting rewards ([`b600437`](https://github.com/ryan-snyder/gym-wordle/commit/b6004376ab5095d6d6d6ed4db7d7b306f269e541))
+
 ## v0.7.3 (2022-04-07)
 ### Fix
 * Fixed calculation error ([`e2f941c`](https://github.com/ryan-snyder/gym-wordle/commit/e2f941ca6323e6623849c4ce471fb998a7a6c504))
