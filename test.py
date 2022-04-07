@@ -9,6 +9,7 @@ env.reset()
 print('Playing one game of wordle, with random action')
 while not env.is_game_over:
     env.render()
-    env.step(env.action_space.sample())
+    obs, _, _, _ = env.step(env.action_space.sample())
     env.action_masks()
+    print(env.compute_reward(obs['achieved_goal'], obs['desired_goal'], ''))
 env.close()
