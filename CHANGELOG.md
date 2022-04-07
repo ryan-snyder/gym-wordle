@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.5 (2022-04-07)
+### Fix
+* Removed extra print ([`17d26b9`](https://github.com/ryan-snyder/gym-wordle/commit/17d26b9288f9fdef11fb3c905d23376d71a761af))
+
 ## v0.7.4 (2022-04-07)
 ### Fix
 * Adjusting rewards ([`b600437`](https://github.com/ryan-snyder/gym-wordle/commit/b6004376ab5095d6d6d6ed4db7d7b306f269e541))
