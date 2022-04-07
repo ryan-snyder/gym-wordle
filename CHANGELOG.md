@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.8 (2022-04-07)
+### Fix
+* Fixing her goals ([`331e467`](https://github.com/ryan-snyder/gym-wordle/commit/331e46776836f299748be922f310e7ec867bd0f3))
+
 ## v0.7.7 (2022-04-07)
 ### Fix
 * Fixed compute_reward ([`b300801`](https://github.com/ryan-snyder/gym-wordle/commit/b30080139b028e0a1ccb9a4571b6178c41223686))
