@@ -76,15 +76,9 @@ class WordleEnvEasy(gym.Env):
         observation = self._get_observation()
         if self.word_bank['words'].to_list()[self.current_guess] == self.WORD.lower():
             self.is_game_over = True
-            #reward = REWARD
-            if self.WORDLE.g_count == 1:
-                reward = 0#-10*REWARD  # No reward for guessing off the bat
-            else:
-                #reward = REWARD*(self.state.remaining_steps() + 1) / self.max_turns
-                reward = 10
         elif self.WORDLE.g_count == self.GUESSES:
             self.is_game_over = True
-            reward = -10
+        reward = self._get_reward()
         self.rewards.append(reward)
         if self.logging:
             print(self.WORD)
@@ -223,11 +217,11 @@ class WordleEnvEasy(gym.Env):
         for g in range(self.WORDLE.g_count):
             word = self.WORDLE.board[g]
             current = ''.join(word)
-            if current.lower() in self.guessed_words:
+            if self.guessed_words.count(current.lower) > 1:
                 new_reward -= 1000
             for l in current.lower(): 
                 if l in self.blank_letters:
-                    new_reward -= 0.5
+                    new_reward -= 0.005
         if self.logging:
             print(self.WORD)
             print(guess)
