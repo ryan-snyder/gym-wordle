@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.7 (2022-04-07)
+### Fix
+* Fixed compute_reward ([`b300801`](https://github.com/ryan-snyder/gym-wordle/commit/b30080139b028e0a1ccb9a4571b6178c41223686))
+
 ## v0.7.6 (2022-04-07)
 ### Fix
 * Changed to random word but same space ([`0b01705`](https://github.com/ryan-snyder/gym-wordle/commit/0b01705be3d5d46d2d319c32265fadcdc01c8252))
