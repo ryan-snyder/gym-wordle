@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.10 (2022-04-07)
+### Fix
+* Changing back to old compute_reward ([`89de522`](https://github.com/ryan-snyder/gym-wordle/commit/89de522c1de469bae3993ebb3da91ceb7327344b))
+
 ## v0.7.9 (2022-04-07)
 ### Fix
 * Changing shape ([`6855940`](https://github.com/ryan-snyder/gym-wordle/commit/6855940b8d5282efbb9f25d9ad4d696c6a8dc004))
