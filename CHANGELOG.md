@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.1 (2022-04-07)
+### Fix
+* Removed extra prints ([`42d3e13`](https://github.com/ryan-snyder/gym-wordle/commit/42d3e1347cb6d092ec61ced34076e6639e576905))
+
 ## v0.7.0 (2022-04-07)
 ### Feature
 * Adding more options to make stuff easier for agents ([`b51621d`](https://github.com/ryan-snyder/gym-wordle/commit/b51621dc7d1cb1b8d565ff72dedb796692051d75))
