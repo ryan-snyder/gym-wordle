@@ -76,6 +76,8 @@ class WordleEnvEasy(gym.Env):
         observation = self._get_observation()
         if self.word_bank['words'].to_list()[self.current_guess] == self.WORD.lower():
             self.is_game_over = True
+            if self.WORDLE.g_count > 1:
+                reward += 10
         elif self.WORDLE.g_count == self.GUESSES:
             self.is_game_over = True
             reward = -10
@@ -227,7 +229,6 @@ class WordleEnvEasy(gym.Env):
             print(self.WORD)
             print(guess)
             print(new_reward)
-        new_reward += 10 if self.guessed_words[self.WORDLE.g_count-1] == self.WORD.lower() and self.WORDLE.g_count != 1 else 0
         return new_reward
     def action_masks(self):
         action_mask = [w in self.guessed_words for w in self.word_bank['words'].tolist()]
