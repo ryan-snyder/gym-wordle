@@ -211,13 +211,6 @@ class WordleEnvEasy(gym.Env):
                 rewards[i] = 2
             elif c == self.colors[1]:
                 rewards[i] = 1
-        #check guesses up to and including our current guess
-        for g in range(self.WORDLE.g_count):
-            word = self.WORDLE.board[g]
-            current = ''.join(word)
-            for l in current.lower(): 
-                if l in self.blank_letters:
-                    new_reward -= 0.05
         if self.logging:
             print(self.WORD)
             print(rewards)
