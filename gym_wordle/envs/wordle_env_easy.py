@@ -129,8 +129,6 @@ class WordleEnvEasy(gym.Env):
         self.episode_memory[self.current_episode].append(guess)
         self.guessed_words.append(guess)
         self.current_guess = action
-        if self.logging:
-            print(guess)
         self.WORDLE.update_board(guess)
         res = self.WORDLE.colours[self.WORDLE.g_count-1]
         for i,l in enumerate(guess):
@@ -198,7 +196,6 @@ class WordleEnvEasy(gym.Env):
             self.word_score()
         guess = self.word_bank['words'].to_list()[self.current_guess]
         new_reward = np.nan_to_num(self.w_bank.loc[self.current_guess, 'w-score']) if guess in self.w_bank.values else 0
-        result, tries = self.WORDLE.game_result()
         rewards = np.zeros(5)
         #heavily penealize guessing the same word multiple times
         #If a word isn't the right guess, we shouldn't guess it again
@@ -211,11 +208,11 @@ class WordleEnvEasy(gym.Env):
                 rewards[i] = 2
             elif c == self.colors[1]:
                 rewards[i] = 1
+        new_reward += 30 - ((self.WORDLE.g_count-1)*5) if guess == self.WORD.lower() else 0
         if self.logging:
             print(self.WORD)
-            print(rewards)
+            print(guess)
             print(new_reward)
-        new_reward += 30 - (tries*5) if guess == self.WORD.lower() else 0
         return new_reward
     def action_masks(self):
         action_mask = [w in self.guessed_words for w in self.word_bank['words'].tolist()]
