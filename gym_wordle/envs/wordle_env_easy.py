@@ -201,7 +201,6 @@ class WordleEnvEasy(gym.Env):
             elif c == self.colors[1]:
                 rewards[i] = 1
         #check guesses up to and including our current guess
-        reward = np.mean(rewards)
         for g in range(self.WORDLE.g_count):
             word = self.WORDLE.board[g]
             current = ''.join(word)
@@ -214,7 +213,7 @@ class WordleEnvEasy(gym.Env):
             print(new_reward)
         new_reward += 30 - (tries*5) if guess == self.WORD.lower() else 0
         return new_reward
-    def action_mask(self):
+    def action_masks(self):
         return [self.guessed_words[key]['action'] for key in self.guessed_words.keys()]
     # TODO: adjust get reward and compute reward to take into account the desired goal
     # But i think this is fine for right now, since our _get_reward does take into account our desired goal
