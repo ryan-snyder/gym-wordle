@@ -197,8 +197,6 @@ class WordleEnvEasy(gym.Env):
         if self.WORDLE.g_count > 1:
             self.word_score()
         guess = self.word_bank['words'].to_list()[self.current_guess]
-        print(guess)
-        print(self.current_guess)
         new_reward = np.nan_to_num(self.w_bank.loc[self.current_guess, 'w-score']) if guess in self.w_bank.values else 0
         result, tries = self.WORDLE.game_result()
         rewards = np.zeros(5)
