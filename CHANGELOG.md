@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.11 (2022-04-07)
+### Fix
+* Fixed typo ([`28d0cce`](https://github.com/ryan-snyder/gym-wordle/commit/28d0cce97a9f51656c2395cf64708adcb8c12fe9))
+
 ## v0.6.10 (2022-04-07)
 ### Fix
 * Fixed some errors and added action masking for maskable ppo ([`44847df`](https://github.com/ryan-snyder/gym-wordle/commit/44847dfb96c4247e411372d7140b3d1ccb1de3fb))
