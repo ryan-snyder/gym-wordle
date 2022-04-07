@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.0 (2022-04-07)
+### Feature
+* Adding more options to make stuff easier for agents ([`b51621d`](https://github.com/ryan-snyder/gym-wordle/commit/b51621dc7d1cb1b8d565ff72dedb796692051d75))
+
 ## v0.6.12 (2022-04-07)
 ### Fix
 * Corrected action mask ([`36b707c`](https://github.com/ryan-snyder/gym-wordle/commit/36b707c019eef55c80f8e42a794d50e775520a1c))
