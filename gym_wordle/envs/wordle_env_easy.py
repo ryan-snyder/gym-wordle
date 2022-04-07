@@ -227,7 +227,7 @@ class WordleEnvEasy(gym.Env):
             print(self.WORD)
             print(guess)
             print(new_reward)
-        new_reward += 10 if self.guessed_words[self.WORDLE.g_count-1] == self.WORD.lower() else 0
+        new_reward += 10 if self.guessed_words[self.WORDLE.g_count-1] == self.WORD.lower() and self.WORDLE.g_count != 1 else 0
         return new_reward
     def action_masks(self):
         action_mask = [w in self.guessed_words for w in self.word_bank['words'].tolist()]
