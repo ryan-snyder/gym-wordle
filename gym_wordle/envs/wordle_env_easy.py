@@ -29,7 +29,7 @@ class WordleEnvEasy(gym.Env):
         self.alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
         self.colors = ['B', 'Y', 'G']
         self.is_game_over = False
-        self.guessed_words = []
+        self.guessed_words = {}
         self.blank_letters = []
         self.rewards = []
         self.vowels = ['A','E','I','O','U']
@@ -79,7 +79,7 @@ class WordleEnvEasy(gym.Env):
         self.is_game_over = False
         self.WORD = self.answers.loc[:,'words'].sample(n=1).tolist()[0].upper()
         self.WORDLE = Wordle(self.WORD, self.GUESSES, self.LETTERS)
-        self.guessed_words = []
+        self.guessed_words = {}
         self.blank_letters = []
         self.rewards = []
         self.g_letters = []
@@ -116,13 +116,15 @@ class WordleEnvEasy(gym.Env):
         # turn action into guess
         guess = self.word_bank['words'].to_list()[action]
         self.episode_memory[self.current_episode].append(guess)
-        self.guessed_words.append(guess)
+        self.guessed_words[self.WORDLE.g_count] = { 'guess': guess, 'action': action}
         self.current_guess = action
         if self.logging:
             print(guess)
         self.WORDLE.update_board(guess)
         res = self.WORDLE.colours[self.WORDLE.g_count-1]
-        self.blank_letters.extend([ l for i,l in enumerate(guess) if res[i] == 'B' and l not in self.blank_letters])
+        for i,l in enumerate(guess):
+            if res[i] == 'B' and l not in self.blank_letters:
+                self.blank_letters.append(l)
         if self.WORDLE.word.lower() == guess:
             print('~~~~~~AGENT GOT IT RIGHT~~~~~~')
         self.is_game_over = self.WORDLE.word.lower() == guess or self.WORDLE.g_count == self.GUESSES
@@ -171,12 +173,12 @@ class WordleEnvEasy(gym.Env):
         for i, s in enumerate(self.prediction):
             if s != '':
                 self.w_bank = self.w_bank.loc[self.w_bank['words'].str[i]==s.lower()]
-        self.w_bank.loc[:, ('w-score')] = 0
+        self.w_bank.loc[:, 'w-score'] = 0
         if len(self.w_bank) > 5:
             self.calc_letter_probs() #Recalculate letter position probability
         for x in range(self.WORDLE.letters):
             if self.prediction[x] == '':
-                self.w_bank.loc[:, ('w-score')] += self.w_bank[f'p-{x}']
+                self.w_bank.loc[:, 'w-score'] += self.w_bank[f'p-{x}']
         
         if True not in [True for s in self.prediction if s in self.vowels]:
             self.w_bank.loc[:, ('w-score')] += self.w_bank.loc[:, ('v-count')] / self.WORDLE.letters
@@ -203,9 +205,7 @@ class WordleEnvEasy(gym.Env):
         for g in range(self.WORDLE.g_count):
             word = self.WORDLE.board[g]
             current = ''.join(word)
-            if current in self.guessed_words:
-                new_reward -= 5
-            for l in word: 
+            for l in current.lower(): 
                 if l in self.blank_letters:
                     new_reward -= 0.5
         if self.logging:
@@ -214,6 +214,8 @@ class WordleEnvEasy(gym.Env):
             print(new_reward)
         new_reward += 30 - (tries*5) if guess == self.WORD.lower() else 0
         return new_reward
+    def action_mask(self):
+        return [self.guessed_words[key]['action'] for key in self.guessed_words.keys()]
     # TODO: adjust get reward and compute reward to take into account the desired goal
     # But i think this is fine for right now, since our _get_reward does take into account our desired goal
     def compute_reward(self, achieved_goal, desired_goal, info):
