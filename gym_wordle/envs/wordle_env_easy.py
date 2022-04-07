@@ -73,12 +73,21 @@ class WordleEnvEasy(gym.Env):
             return RuntimeError('Episode is already done')
         self.word_score()
         self._take_action(action)
-        reward = self._get_reward()
-        self.rewards.append(reward)
+        reward = 0
         observation = self._get_observation()
         if self.word_bank['words'].to_list()[self.current_guess] == self.WORD.lower():
-            print(self.rewards)
-            print(np.mean(np.array(self.rewards)))
+            self.is_game_over = True
+            #reward = REWARD
+            if self.WORDLE.g_count == 1:
+                reward = 0#-10*REWARD  # No reward for guessing off the bat
+            else:
+                #reward = REWARD*(self.state.remaining_steps() + 1) / self.max_turns
+                reward = 10
+        elif self.WORDLE.g_count == self.GUESSES:
+            self.is_game_over = True
+            reward = -10
+        self.rewards.append(reward)
+        print(reward)
         return observation, reward, self.is_game_over, {}
 
     def reset(self):
@@ -136,7 +145,6 @@ class WordleEnvEasy(gym.Env):
                 self.blank_letters.append(l)
         if self.WORDLE.word.lower() == guess:
             print('~~~~~~AGENT GOT IT RIGHT~~~~~~')
-        self.is_game_over = self.WORDLE.word.lower() == guess or self.WORDLE.g_count == self.GUESSES
     def calc_letter_probs(self):
         for x in range(self.WORDLE.letters):
             counts = self.w_bank.loc[:, ('words')].str[x].value_counts(normalize=True).to_dict()
