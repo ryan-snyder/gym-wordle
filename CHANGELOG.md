@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.6 (2022-04-07)
+### Fix
+* Changed to random word but same space ([`0b01705`](https://github.com/ryan-snyder/gym-wordle/commit/0b01705be3d5d46d2d319c32265fadcdc01c8252))
+
 ## v0.7.5 (2022-04-07)
 ### Fix
 * Removed extra print ([`17d26b9`](https://github.com/ryan-snyder/gym-wordle/commit/17d26b9288f9fdef11fb3c905d23376d71a761af))
