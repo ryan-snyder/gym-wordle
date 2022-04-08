@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.3 (2022-04-08)
+### Fix
+* Adding print for sanity check ([`f4bb349`](https://github.com/ryan-snyder/gym-wordle/commit/f4bb3498165690d958c5c81ee3853cae89e88b79))
+
 ## v0.8.2 (2022-04-08)
 ### Fix
 * Adjusted compute_reward ([`2d38873`](https://github.com/ryan-snyder/gym-wordle/commit/2d388733bc7bbfc75f255a726033803adb333a01))
