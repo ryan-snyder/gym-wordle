@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.4 (2022-04-08)
+### Fix
+* Adding more print to try to fix error ([`9b29d67`](https://github.com/ryan-snyder/gym-wordle/commit/9b29d67f90649de614308cd04250a13a5e5c319e))
+
 ## v0.8.3 (2022-04-08)
 ### Fix
 * Adding print for sanity check ([`f4bb349`](https://github.com/ryan-snyder/gym-wordle/commit/f4bb3498165690d958c5c81ee3853cae89e88b79))
