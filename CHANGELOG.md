@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.0 (2022-04-08)
+### Feature
+* Changing to new state ([`b1c0bdf`](https://github.com/ryan-snyder/gym-wordle/commit/b1c0bdf81eff5835ddb48412b03e5b71a362c8c1))
+
 ## v0.7.16 (2022-04-07)
 ### Fix
 * Changing reward calc again ([`4b0de02`](https://github.com/ryan-snyder/gym-wordle/commit/4b0de02e54f23622f518e02c04f10004b23d90f3))
