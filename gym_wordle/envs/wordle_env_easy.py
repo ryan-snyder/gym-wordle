@@ -157,8 +157,11 @@ class WordleEnvEasy(gym.Env):
     # But i think this is fine for right now, since our _get_reward does take into account our desired goal
     def compute_reward(self, achieved_goal, desired_goal, info):
         reward = 10
+        print(achieved_goal)
+        print(desired_goal)
         for i in range(5):
-            reward -= desired_goal[i] - achieved_goal[i]
+            adjustment = desired_goal[i] - achieved_goal[i]
+            reward -= adjustment
         print(np.shape(info))
         print(reward)
         return reward
