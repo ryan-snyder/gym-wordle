@@ -159,6 +159,8 @@ class WordleEnvEasy(gym.Env):
         reward = 10
         for i in range(5):
             reward -= desired_goal[i] - achieved_goal[i]
+        print(np.shape(info))
+        print(reward)
         return reward
 
     def _get_observation(self):
