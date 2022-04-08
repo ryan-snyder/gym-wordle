@@ -156,7 +156,10 @@ class WordleEnvEasy(gym.Env):
     # TODO: adjust get reward and compute reward to take into account the desired goal
     # But i think this is fine for right now, since our _get_reward does take into account our desired goal
     def compute_reward(self, achieved_goal, desired_goal, info):
-        return self._get_reward()
+        reward = 10
+        for i in range(5):
+            reward -= desired_goal[i] - achieved_goal[i]
+        return reward
 
     def _get_observation(self):
         board = np.array(self.WORDLE.board) #2d array of 5x6
