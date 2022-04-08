@@ -145,6 +145,7 @@ class WordleEnvEasy(gym.Env):
         if self.word_bank['words'].to_list()[self.current_guess] == self.WORD.lower():
             if self.WORDLE.g_count > 1:
                 new_reward = 10
+            else: new_reward = -20
         elif self.WORDLE.g_count == self.GUESSES:
             new_reward = -10
         return new_reward
