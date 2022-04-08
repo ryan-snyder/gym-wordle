@@ -156,8 +156,6 @@ class WordleEnvEasy(gym.Env):
     # TODO: adjust get reward and compute reward to take into account the desired goal
     # But i think this is fine for right now, since our _get_reward does take into account our desired goal
     def compute_reward(self, achieved_goal, desired_goal, info):
-        print(achieved_goal)
-        print(desired_goal)
         rewards = np.zeros((len(achieved_goal)))
         for i,result in enumerate(achieved_goal):
             for goal in desired_goal:
@@ -165,7 +163,6 @@ class WordleEnvEasy(gym.Env):
                 for g in range(len(goal)):
                     adjusted -= goal[g] - result[g]
                     rewards[i] = adjusted
-        print(rewards)
         return np.mean(rewards)
 
     def _get_observation(self):
