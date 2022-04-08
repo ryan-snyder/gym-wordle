@@ -6,6 +6,7 @@ from gym_wordle.wordle import Wordle
 import pygame
 import numpy as np
 import os
+import state
 
 class WordleEnvEasy(gym.Env):
     metadata = {'render.modes': ['human']}
@@ -39,13 +40,10 @@ class WordleEnvEasy(gym.Env):
         self.guessed_words = []
         self.blank_letters = []
         self.rewards = []
-        self.vowels = ['A','E','I','O','U']
         file_names = ['{}/wordle-answers-alphabetical.txt'.format(current_dir)]
         #self.word_bank = pd.concat((pd.read_csv(f, header=None, names=['words']) for f in file_names), ignore_index=True).sort_values('words')
         self.word_bank = self.answers
-        self.word_bank.loc[:,'v-count'] = self.word_bank.loc[:,'words'].str.lower().str.count(r'[aeiou]') #Count amount of vowels in words
         # our action space is the total amount of possible words to guess
-        self.w_bank = self.word_bank
         if action_type == 'Discrete':
             self.action_space = spaces.Discrete(words)
         else:
@@ -61,12 +59,14 @@ class WordleEnvEasy(gym.Env):
         # since right now its on a 0-29 scale instead of a 0-1.
         #self.observation_space = spaces.Box(low=0, high=29, shape=(1,12,5), dtype='int32')
         self.observation_space = spaces.Dict({
-            'observation': spaces.Box(low=0, high=29, shape=(12,5), dtype='int32'),
+            'observation': spaces.Box(low=0, high=1, shape=(27,), dtype='int32'),
             'achieved_goal': spaces.Box(low=27, high=29, shape=(5,), dtype='int32'),
             'desired_goal': spaces.Box(low=29, high=29, shape=(5,), dtype='int32')
         })
         self.current_episode = -1
         self.episode_memory: List[Any] = []
+        self.state: state.WordleState = None
+        self.state_updater = state.update
 
     def step(self, action):
         if self.is_game_over:
@@ -82,6 +82,7 @@ class WordleEnvEasy(gym.Env):
         self.rewards.append(reward)
         if self.logging:
             print(self.WORD)
+            print(self.guessed_words)
             print(self.rewards)
         return observation, reward, self.is_game_over, {}
 
@@ -97,13 +98,9 @@ class WordleEnvEasy(gym.Env):
         self.guessed_words = []
         self.blank_letters = []
         self.rewards = []
-        self.g_letters = []
-        self.y_letters = {}
-        self.w_bank = self.word_bank
         if self.logging:
             print(self.WORDLE.word)
         self.close()
-        self.word_score()
         return self._get_observation()
 
     def render(self, mode='human'):
@@ -142,60 +139,6 @@ class WordleEnvEasy(gym.Env):
         if self.WORDLE.word.lower() == guess:
             print('~~~~~~AGENT GOT IT RIGHT~~~~~~')
             print(self.guessed_words)
-    def calc_letter_probs(self):
-        for x in range(self.WORDLE.letters):
-            counts = self.w_bank.loc[:, ('words')].str[x].value_counts(normalize=True).to_dict()
-            self.w_bank.loc[:, (f'p-{x}')] = self.w_bank.loc[:, ('words')].str[x].map(counts)
-    def parse_board(self):
-        self.g_letters = []
-        self.y_letters = {}
-        if self.WORDLE.g_count > 0:
-            g_hold = []
-            for x, c in enumerate(self.WORDLE.colours[self.WORDLE.g_count - 1]):
-                letter = self.WORDLE.board[self.WORDLE.g_count - 1][x]
-                if c == 'Y':
-                    if letter not in self.y_letters:
-                        self.y_letters[letter] = [x]
-                    else:
-                        if x not in self.y_letters[letter]:
-                            self.y_letters[letter].append(x)
-                elif c == 'G':
-                    self.prediction[x] = letter
-                else:
-                    if letter in self.prediction:
-                        if letter not in self.y_letters:
-                            self.y_letters[letter] = [x]
-                        else:
-                            self.y_letters[letter].append(x)
-                    elif letter not in self.g_letters:
-                        self.g_letters.append(letter)
-            self.g_letters = [l for l in self.g_letters if l not in self.y_letters and l not in self.prediction]
-    def word_score(self):
-        self.calc_letter_probs()
-        self.prediction = ['' for _ in range(self.WORDLE.letters)]
-        self.parse_board()
-        if len(self.g_letters) > 0:
-            self.w_bank = self.w_bank.loc[~self.w_bank['words'].str.contains('|'.join(self.g_letters).lower())]
-            self.g_letters = []
-        if len(self.y_letters) > 0:
-            y_str = '^' + ''.join(fr'(?=.*{l})' for l in self.y_letters)
-            self.w_bank = self.w_bank.loc[self.w_bank['words'].str.contains(y_str.lower())]
-            for s, p in self.y_letters.items():
-                for i in p:
-                    self.w_bank = self.w_bank.loc[self.w_bank['words'].str[i]!=s.lower()]
-            self.y_letters = {}
-        for i, s in enumerate(self.prediction):
-            if s != '':
-                self.w_bank = self.w_bank.loc[self.w_bank['words'].str[i]==s.lower()]
-        self.w_bank.loc[:, 'w-score'] = 0
-        if len(self.w_bank) > 5:
-            self.calc_letter_probs() #Recalculate letter position probability
-        for x in range(self.WORDLE.letters):
-            if self.prediction[x] == '':
-                self.w_bank.loc[:, 'w-score'] += self.w_bank[f'p-{x}']
-        
-        if True not in [True for s in self.prediction if s in self.vowels]:
-            self.w_bank.loc[:, ('w-score')] += self.w_bank.loc[:, ('v-count')] / self.WORDLE.letters
     def _get_reward(self):
         new_reward = 0
         if self.word_bank['words'].to_list()[self.current_guess] == self.WORD.lower():
@@ -203,9 +146,6 @@ class WordleEnvEasy(gym.Env):
                 new_reward = 10
         elif self.WORDLE.g_count == self.GUESSES:
             new_reward = -10
-        if self.logging:
-            print(self.WORD)
-            print(new_reward)
         return new_reward
     def action_masks(self):
         action_mask = [w in self.guessed_words for w in self.word_bank['words'].tolist()]
@@ -225,4 +165,11 @@ class WordleEnvEasy(gym.Env):
         guesses = np.array([convertletterstonum(l) if i <=5 else convertcolortonum(l) for i, l in enumerate(results)])
         colors = np.array(convertcolortonum(colors[self.WORDLE.g_count-1]))
         #guesses3d = np.expand_dims(guesses, axis=0)
+        if self.state_updater is not None and self.WORDLE.g_count is not 0:
+            return { 
+                'observation': self.state_updater(self.state, self.guessed_words[self.WORDLE.g_count-1], self.WORD.lower()), 
+                'achieved_goal': colors, 'desired_goal': [29,29,29,29,29]}
+        elif self.state_updater is not None: return {
+            'observation': state.get_nvec(6),
+            'achieved_goal': colors, 'desired_goal': [29,29,29,29,29]}
         return { 'observation': guesses, 'achieved_goal': colors, 'desired_goal': [29,29,29,29,29]}
