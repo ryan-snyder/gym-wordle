@@ -133,20 +133,19 @@ def update_mask(state: WordleState, word: str, goal_word: str) -> WordleState:
 
 def update(state: WordleState, word: str, goal_word: str) -> WordleState:
     state = state.copy()
-
     state[0] -= 1
-    for i, c in enumerate(word):
+    for i, c in enumerate(word.upper()):
         cint = ord(c) - ord(WORDLE_CHARS[0])
         offset = 1 + len(WORDLE_CHARS) + cint * WORDLE_N * 3
         state[1 + cint] = 1
-        if goal_word[i] == c:
+        if goal_word.upper()[i] == c:
             # char at position i = yes, all other chars at position i == no
             state[offset + 3 * i:offset + 3 * i + 3] = [0, 0, 1]
             for ocint in range(len(WORDLE_CHARS)):
                 if ocint != cint:
                     oc_offset = 1 + len(WORDLE_CHARS) + ocint * WORDLE_N * 3
                     state[oc_offset + 3 * i:oc_offset + 3 * i + 3] = [1, 0, 0]
-        elif c in goal_word:
+        elif c in goal_word.upper():
             # Char at position i = no, other chars stay as they are
             state[offset + 3 * i:offset + 3 * i + 3] = [1, 0, 0]
         else:

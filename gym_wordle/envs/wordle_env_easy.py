@@ -6,7 +6,7 @@ from gym_wordle.wordle import Wordle
 import pygame
 import numpy as np
 import os
-import state
+import gym_wordle.envs.state as state
 
 class WordleEnvEasy(gym.Env):
     metadata = {'render.modes': ['human']}
@@ -59,7 +59,7 @@ class WordleEnvEasy(gym.Env):
         # since right now its on a 0-29 scale instead of a 0-1.
         #self.observation_space = spaces.Box(low=0, high=29, shape=(1,12,5), dtype='int32')
         self.observation_space = spaces.Dict({
-            'observation': spaces.Box(low=0, high=1, shape=(27,), dtype='int32'),
+            'observation': spaces.Box(low=0, high=6, shape=(417,), dtype='int32'),
             'achieved_goal': spaces.Box(low=27, high=29, shape=(5,), dtype='int32'),
             'desired_goal': spaces.Box(low=29, high=29, shape=(5,), dtype='int32')
         })
@@ -101,6 +101,7 @@ class WordleEnvEasy(gym.Env):
         if self.logging:
             print(self.WORDLE.word)
         self.close()
+        self.state = state.new(self.GUESSES)
         return self._get_observation()
 
     def render(self, mode='human'):
@@ -165,11 +166,14 @@ class WordleEnvEasy(gym.Env):
         guesses = np.array([convertletterstonum(l) if i <=5 else convertcolortonum(l) for i, l in enumerate(results)])
         colors = np.array(convertcolortonum(colors[self.WORDLE.g_count-1]))
         #guesses3d = np.expand_dims(guesses, axis=0)
-        if self.state_updater is not None and self.WORDLE.g_count is not 0:
+        if self.state_updater != None and self.WORDLE.g_count != 0:
             return { 
-                'observation': self.state_updater(self.state, self.guessed_words[self.WORDLE.g_count-1], self.WORD.lower()), 
-                'achieved_goal': colors, 'desired_goal': [29,29,29,29,29]}
-        elif self.state_updater is not None: return {
-            'observation': state.get_nvec(6),
-            'achieved_goal': colors, 'desired_goal': [29,29,29,29,29]}
+                'observation': self.state_updater(state=self.state, word=self.guessed_words[self.WORDLE.g_count-1], goal_word=self.WORD.lower()), 
+                'achieved_goal': colors, 'desired_goal': [29,29,29,29,29]
+            }
+        elif self.state_updater != None: 
+            return {
+                'observation': state.get_nvec(6),
+                'achieved_goal': colors, 'desired_goal': [29,29,29,29,29]
+            }
         return { 'observation': guesses, 'achieved_goal': colors, 'desired_goal': [29,29,29,29,29]}
