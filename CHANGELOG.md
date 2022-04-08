@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.1 (2022-04-08)
+### Fix
+* Adjusting reward ([`4b9cd75`](https://github.com/ryan-snyder/gym-wordle/commit/4b9cd75081879242e8ac8e5f8c38fa530396dccc))
+
 ## v0.8.0 (2022-04-08)
 ### Feature
 * Changing to new state ([`b1c0bdf`](https://github.com/ryan-snyder/gym-wordle/commit/b1c0bdf81eff5835ddb48412b03e5b71a362c8c1))
